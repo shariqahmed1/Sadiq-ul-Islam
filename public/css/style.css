@@ -3553,13 +3553,14 @@ ul.rounded li::before {
 	display: table-cell;
 }
 .single_post .post {
-   height: 60px;
-   width: 60px;
+   height: 50px;
+   width: 50px;
 }
 .single_post .post > img {
 	width: 100%;
-	-webkit-border-radius: 50%;
-	border-radius: 50%;
+	height: 100%;
+	-webkit-border-radius: 100px;
+	border-radius: 100px;
 }
 .single_post .text {
 	vertical-align: middle;
@@ -4466,6 +4467,10 @@ html{
    height: 250px;
  }
 
+.bayans-details{
+   height: 400px;
+ }
+
 @media (max-width: 992px) {
    .programs{
       height:300px;
@@ -4473,6 +4478,9 @@ html{
    }
    .bayans{
       height: 250px;
+   }
+   .bayans-details{
+      height: 300px;
    }
    .map-style{
       height:400px;
@@ -4494,8 +4502,17 @@ html{
    .bayans{
       height: 150px;
    }
+   .bayans-details{
+      height: 250px;
+   }
    .map-style{
       height:300px;
+   }
+   .details-page-image-wrapper{
+      height: 300px; 
+      width: 300px;
+      display: block;
+      margin: 0 auto;
    }
    /* .programsBg::after {
       left: 20.2%;
@@ -4532,6 +4549,12 @@ html{
       width:100%;
       height:400px;
    }
+   .details-page-image-wrapper{
+         height: 350px; 
+         width: 300px;
+         display: block;
+         margin: 0 auto;
+      }
 }
 
 @media (max-width:400px){
@@ -4550,6 +4573,19 @@ html{
 
 .breadcrumb-item+.breadcrumb-item::before{
   color: #fff !important; 
+}
+
+.details-page-image-wrapper{
+    height: 400px !important; 
+    width: 300px !important;
+    display: block !important;
+    margin: 0 auto;
+}
+
+.react-modal-body{
+   width: 90% !important;
+   height: 80vh !important;
+   margin-top: 50px !important;
 }
 
 /*  */

@@ -3,7 +3,9 @@ import { Router, Route, Redirect, Switch } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import Home from "../screens/home/Home";
 import Bayans from "../screens/bayans/Bayans";
-// import { connect } from 'react-redux';
+import Books from "../screens/books/Books";
+import BookDetails from "../screens/bookDetails/BookDetails";
+import BayanDetails from "../screens/bayanDetails/BayanDetails";
 
 const history = createBrowserHistory();
 
@@ -25,10 +27,13 @@ class Routes extends Component {
     // const { login } = this.state;
     return (
       <Router history={history}>
-        <Switch>
+        <div>
           <Route exact path="/" component={Home} />
           <Route exact path="/bayans" component={Bayans} />
-        </Switch>
+          <Route path="/bayan-details" component={BayanDetails} />
+          <Route exact path="/books" component={Books} />
+          <Route path="/book-details" component={BookDetails} />
+        </div>
       </Router>
     );
   }

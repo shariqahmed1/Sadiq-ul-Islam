@@ -10,14 +10,59 @@ import Events from "../../components/events/Events";
 import Counters from "../../components/counters/Counters";
 import Contact from "../../components/contact/Contact";
 import Footer from "../../components/footer/Footer";
+import { store } from "../../redux/store/store";
+import { loader } from "../../redux/actions/actions";
+// import axios from "axios";
 
 class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoader: true
+    };
+  }
+
+  // static getDerivedStateFromProps(nextProps, nextState) {
+  //   let stor = store.getState().AuthReducer;
+  //   if (stor.loader === true) {
+  //     console.log("Ye chala");
+  //     return {
+  //       isLoader: false
+  //     };
+  //   }
+  // }
+
+  // componentDidMount() {
+  //   this.closeLoader();
+  //   let instance = axios.create({
+  //     baseURL: "http://18.209.167.23/api/"
+  //   });
+
+  //   instance
+  //     .get("vendor/get_products/?id=e3489418-ddad-4aef-801c-19a4b1cda4ff")
+  //     .then(res => console.log(res))
+  //     .catch(err => console.log(err));
+  //   // store.subscribe(() => console.log(store.getState(), " ** subscribe"));
+  // }
+
+  closeLoader = () => {
+    setTimeout(() => {
+      this.setState({ isLoader: false });
+    }, 2000);
+  };
+
+  componentWillUnmount() {
+    // store.dispatch(loader(true));
+  }
+
   render() {
+    const { isLoader } = this.state;
     return (
       <div>
         {/* <!--PreLoader--> */}
-        <PreLoader />
+        {/* {isLoader && <PreLoader />} */}
 
+        {/* <PreLoader /> */}
         {/* <!-- header --> */}
         <Header />
 

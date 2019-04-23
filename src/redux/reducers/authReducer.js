@@ -1,8 +1,5 @@
 const reducer = (state = {}, action) => {
   switch (action.type) {
-    //   case "GET_USER_DETAILS": {
-    //     return { ...state, user: action.user };
-    //   }
     case "IS_LOGIN": {
       return { ...state, isLogin: action.isLogin };
     }
@@ -14,6 +11,9 @@ const reducer = (state = {}, action) => {
     }
     case "GET_PERSONALITIES": {
       return { ...state, personalities: action.personalities };
+    }
+    case "LOADER": {
+      return { ...state, loader: action.loader };
     }
     default: {
       return state;

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { FIRESTORE } from "../../constants/firebase/firebase";
+import { Link } from "react-router-dom";
 
 class LatestAudio extends Component {
   constructor(props) {
@@ -64,13 +65,13 @@ class LatestAudio extends Component {
                     </p>
                   )}
                   {latestBayan !== null && (
-                    <a
-                      href="#portfolio_top"
+                    <Link
+                      to="/bayans"
                       className="button btnprimary pagescroll wow fadeInUp"
                       data-wow-delay="450ms"
                     >
                       see more
-                    </a>
+                    </Link>
                   )}
                 </div>
               </div>

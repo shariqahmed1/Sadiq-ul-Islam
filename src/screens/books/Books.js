@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "font-awesome/css/font-awesome.min.css";
 import OthersPageHeader from "../../components/othersPageHeader/OthersPageHeader";
 import PageHeader from "../../components/pageHeader/PageHeader";
+import Contact from "../../components/contact/Contact";
 import Footer from "../../components/footer/Footer";
 import { Link } from "react-router-dom";
 
@@ -14,7 +15,7 @@ class Bayans extends Component {
 
         {/* <!--PageHeader--> */}
         <PageHeader
-          title={"Bayans"}
+          title={"Books"}
           data={[
             {
               title: "Home",
@@ -22,48 +23,48 @@ class Bayans extends Component {
               link: "/"
             },
             {
-              title: "Bayans",
+              title: "Books",
               isActive: true,
-              link: "/bayans"
+              link: "/books"
             }
           ]}
         />
         <section id="our-blog" class="bglight padding text-center">
           <div class="container">
-            <div
-            // id="blog-measonry"
-            >
+            <div>
               <div class="cbp-item" style={{ width: 350, left: 0, top: 0 }}>
                 <div class="cbp-item-wrapper">
                   <div class="news_item shadow">
-                    <a class="image" href="javascript:void(0)">
-                      {/* <img
-                        src={require("../../images/blog-measonry1.jpg")}
+                    <a class="image" href="blog-detail.html">
+                      <img
+                        src={require("../../images/book.jpg")}
                         alt="Latest News"
-                        class="img-responsive"
-                      /> */}
-                      <iframe
-                        className="img-responsive bayans"
-                        title={"bayans"}
-                        scrolling="no"
-                        frameBorder="no"
-                        allow="autoplay"
-                        src={
-                          "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/158012399&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"
-                        }
+                        class="img-responsive bayans"
                       />
+                      {/* <iframe
+                        className="img-responsive bayans"
+                        title={"books"}
+                        scrolling="no"
+                        frameBorder="0"
+                        webkitallowfullscreen="true"
+                        mozallowfullscreen="true"
+                        allowfullscreen
+                        src={
+                          "https://archive.org/embed/Bahareshariatjild3maktabatulmadina"
+                        }
+                      /> */}
                     </a>
                     <div class="news_desc">
                       <h3 class="text-capitalize font-light darkcolor">
-                        <a href="blog-detail.html">Bayan Title</a>
+                        <a href="blog-detail.html">Book Title</a>
                       </h3>
                       <p class="top20 bottom35">
-                        Bayan Desc Lorem Ipsum is simply dummy text of the
+                        Book Desc Lorem Ipsum is simply dummy text of the
                         printing and typesetting industry. Lorem Ipsum has been
                         the industry's standard dummy text ever since the 1500s
                       </p>
                       <Link
-                        to="/bayan-details"
+                        to="/book-details"
                         class="button btnprimary btn-gradient-hvr"
                       >
                         Read more
@@ -106,9 +107,6 @@ class Bayans extends Component {
             </div>
           </div>
         </section>
-
-        {/* <!--Contact--> */}
-        {/* <Contact /> */}
 
         {/* <!--Footer--> */}
         <Footer />

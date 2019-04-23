@@ -16,6 +16,13 @@ export const speechers = speechers => {
   };
 };
 
+export const loader = loader => {
+  return {
+    type: "LOADER",
+    loader
+  };
+};
+
 export const authors = authors => {
   return {
     type: "GET_AUTHORS",

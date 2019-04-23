@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "font-awesome/css/font-awesome.min.css";
-import AnchorLink from "react-anchor-link-smooth-scroll";
 import SearchBox from "../searchBox/SearchBox";
 import { FIRESTORE } from "../../constants/firebase/firebase";
 import { Link } from "react-router-dom";
@@ -75,11 +74,11 @@ class Header extends Component {
     const { isShow, speechers, authors, personalities } = this.state;
 
     return (
-      <div id="top">
+      <div>
         <header className="site-header">
           <nav className="navbar navbar-expand-xl center-brand static-nav">
             <div className="container">
-              <a className="navbar-brand" href="/">
+              <a className="navbar-brand" href="index.html">
                 <img
                   src={require("../../images/logo-default.png")}
                   alt="logo"
@@ -106,9 +105,9 @@ class Header extends Component {
               <div className="collapse navbar-collapse" id="xenav">
                 <ul className="navbar-nav" id="container">
                   <li className="nav-item">
-                    <AnchorLink offset="70" className="nav-link" href="#top">
+                    <Link className="nav-link" to="/#top">
                       HOME
-                    </AnchorLink>
+                    </Link>
                   </li>
                   <li className="nav-item has-sub dropdown">
                     <a
@@ -129,13 +128,9 @@ class Header extends Component {
                       className="dropdown-menu zoom-in"
                       aria-labelledby="navbarDropdown"
                     >
-                      <AnchorLink
-                        offset="70"
-                        className="dropdown-item"
-                        href="#latest-audio"
-                      >
+                      <Link className="dropdown-item" to="/#latest-audio">
                         Latest
-                      </AnchorLink>
+                      </Link>
                       {speechers.length > 0 && (
                         <div className="dropdown-divider" />
                       )}
@@ -155,7 +150,7 @@ class Header extends Component {
                     </div>
                   </li>
                   <li className="nav-item has-sub dropdown">
-                    <a
+                    <Link
                       className="nav-link pagescroll drop"
                       id="navbarDropdown2"
                       data-toggle="dropdown"
@@ -168,18 +163,14 @@ class Header extends Component {
                       >
                         <i className="fa fa-angle-down" />
                       </span>
-                    </a>
+                    </Link>
                     <div
                       className="dropdown-menu zoom-in"
                       aria-labelledby="navbarDropdown2"
                     >
-                      <AnchorLink
-                        offset="70"
-                        className="dropdown-item"
-                        href="#latest-book"
-                      >
+                      <Link className="dropdown-item" to="/#latest-book">
                         Latest
-                      </AnchorLink>
+                      </Link>
                       {authors.length > 0 && (
                         <div className="dropdown-divider" />
                       )}
@@ -199,12 +190,9 @@ class Header extends Component {
                     </div>
                   </li>
                   <li className="nav-item">
-                    <AnchorLink
-                      className="nav-link pagescroll"
-                      href="#programs"
-                    >
+                    <Link className="nav-link pagescroll" to="/#programs">
                       EVENTS
-                    </AnchorLink>
+                    </Link>
                   </li>
                 </ul>
                 <ul className="navbar-nav ml-auto">
@@ -232,13 +220,9 @@ class Header extends Component {
                       className="dropdown-menu zoom-in"
                       aria-labelledby="navbarDropdown3"
                     >
-                      <AnchorLink
-                        offset="70"
-                        className="dropdown-item"
-                        href="#latest-book"
-                      >
+                      <Link className="dropdown-item" to="/#latest-book">
                         ABOUT US
-                      </AnchorLink>
+                      </Link>
                       {personalities.length > 0 && (
                         <div className="dropdown-divider" />
                       )}
@@ -258,12 +242,9 @@ class Header extends Component {
                     </div>
                   </li>
                   <li className="nav-item">
-                    <AnchorLink
-                      className="nav-link pagescroll"
-                      href="#contactus"
-                    >
+                    <Link className="nav-link pagescroll" to="/#contactus">
                       CONTACT US
-                    </AnchorLink>
+                    </Link>
                   </li>
                   {/* <li className="nav-item">
                     <a className="nav-link pagescroll" href="#our-testimonial">LOGIN</a>

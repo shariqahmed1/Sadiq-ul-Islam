@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { FIRESTORE } from "../../constants/firebase/firebase";
+import { withRouter } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 class LatestBook extends Component {
   constructor(props) {
@@ -23,7 +25,7 @@ class LatestBook extends Component {
   //     console.log(personalities);
   //   });
   // }
-  
+
   render() {
     const { personalities } = this.state;
     return (
@@ -61,13 +63,14 @@ class LatestBook extends Component {
                     sodales lectus. Nam porttitor justo sed mi finibus, vel
                     tristique risus faucibus.
                   </p>
-                  <a
-                    href="#our-team"
+                  <Link
+                    to="/books"
                     className="button btnsecondary pagescroll wow fadeInUp"
                     data-wow-delay="450ms"
+                    onClick={() => this.props.history.push("/books")}
                   >
                     See More
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -78,4 +81,4 @@ class LatestBook extends Component {
   }
 }
 
-export default LatestBook;
+export default withRouter(LatestBook);
