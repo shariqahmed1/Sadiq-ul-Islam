@@ -3,9 +3,53 @@ import "font-awesome/css/font-awesome.min.css";
 import OthersPageHeader from "../../components/othersPageHeader/OthersPageHeader";
 import PageHeader from "../../components/pageHeader/PageHeader";
 import Footer from "../../components/footer/Footer";
+import { store } from "../../redux/store/store";
+import "../404/style.css";
+import { FIRESTORE } from "../../constants/firebase/firebase";
 
 class Bayans extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showModal: false,
+      type: "slideInDown",
+      isLoading: true,
+      data: null,
+      recommendedLoader: true
+    };
+  }
+
+  componentDidMount() {
+    let { AuthReducer } = store.getState();
+    this.checkDetailIsExistOrNot(AuthReducer);
+  }
+
+  checkDetailIsExistOrNot(AuthReducer) {
+    if (AuthReducer) {
+      if (AuthReducer.bayanDetails) {
+        this.fetchBookDetails(AuthReducer.bayanDetails.id);
+      } else {
+        this.props.history.push("/bayans");
+      }
+    } else {
+      this.props.history.push("/bayans");
+    }
+  }
+
+  fetchBookDetails(id) {
+    FIRESTORE.collection("bayans")
+      .doc(id)
+      .onSnapshot(doc => {
+        this.setState({
+          data: doc.data(),
+          isLoading: false
+        });
+      });
+  }
+
   render() {
+    console.clear();
+    const { isLoading, data } = this.state;
     return (
       <div>
         {/* <!-- header --> */}
@@ -32,56 +76,78 @@ class Bayans extends Component {
             }
           ]}
         />
-        <section id="our-blog" class="padding bglight">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-8">
-                <div class="news_item shadow">
-                  <div class="image">
-                    {/* <img
-                      src={require("../../images/book.jpg")}
-                      alt="Latest News"
-                      class="img-responsive"
-                    /> */}
-                    <iframe
-                      className="img-responsive bayans-details"
-                      title={"bayans"}
-                      scrolling="no"
-                      frameBorder="no"
-                      allow="autoplay"
-                      src={
-                        "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/158012399&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"
-                      }
-                    />
+        <section id="our-blog" className="padding bglight">
+          <div className="container">
+            <div className="row">
+              <div className="col-md-10 offset-md-1">
+                <div className="news_item shadow">
+                  <div className="image">
+                    {isLoading ? (
+                      <div className="loader-details-bayan" />
+                    ) : (
+                      <iframe
+                        className="img-responsive bayans-details"
+                        title={"bayans"}
+                        scrolling="no"
+                        frameBorder="no"
+                        allow="autoplay"
+                        src={data.embed}
+                      />
+                    )}
                   </div>
-                  <div class="news_desc text-left">
-                    <h3 class="text-capitalize font-light darkcolor">
-                      <a href="blog-detail.html">Book Title</a>
+                  <div className="news_desc text-left">
+                    <h3 className="text-capitalize font-light darkcolor text-center">
+                      {isLoading ? (
+                        <div className="loader-title-line" />
+                      ) : (
+                        data.title
+                      )}
                     </h3>
-                    <ul class="meta-tags top20 bottom20">
+                    <ul className="meta-tags top20 bottom20">
                       <li>
-                        <a href="javascript:void(0)">
-                          <i class="fa fa-calendar" />
-                          Feb 14, 2018
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#.">
-                          {" "}
-                          <i class="fa fa-user-o" /> Speecher name
-                        </a>
+                        {" "}
+                        {!isLoading && (
+                          <i
+                            style={{ marginBottom: 6 }}
+                            className="fa fa-user-o"
+                          />
+                        )}
+                        {isLoading ? (
+                          <div className="loader-text-line" />
+                        ) : (
+                          <span
+                            style={{
+                              fontSize: 14,
+                              fontWeight: 400,
+                              marginLeft: 5
+                            }}
+                          >
+                            {data.speecherName}
+                          </span>
+                        )}
                       </li>
                     </ul>
-                    <p class="bottom35">
-                      Bayan Desc Lorem Ipsum is simply dummy text of the
-                      printing and typesetting industry. Lorem Ipsum has been
-                      the industry's standard dummy text ever since the 1500s,
-                      when an unknown printer took a galley.
-                    </p>
+                    {isLoading ? (
+                      <div className="bottom35">
+                        <div className="loader-desc-line" />
+                        <div className="loader-desc-line" />
+                        <div className="loader-desc-line" />
+                      </div>
+                    ) : (
+                      <p
+                        className="bottom35"
+                        style={{ textAlign: !data.description && "center" }}
+                        dangerouslySetInnerHTML={{
+                          __html: data.description
+                            ? data.description
+                            : "No Description"
+                        }}
+                      />
+                    )}
                   </div>
                 </div>
               </div>
-              <div class="col-md-4">
+              {/* <div class="col-md-4">
                 <aside class="sidebar whitebox">
                   <div class="widget heading_space">
                     <h4 class="text-capitalize darkcolor bottom20">
@@ -129,6 +195,7 @@ class Bayans extends Component {
                   </div>
                 </aside>
               </div>
+             */}
             </div>
           </div>
         </section>

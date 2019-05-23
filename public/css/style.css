@@ -40,7 +40,7 @@ body {
     font-family: 'Raleway', sans-serif;
     /* font-family:apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"; */
     font-size: 1rem;
-    color: #979797;
+    color: #5d5c5c;
     overflow-x: hidden !important;
     overflow-y: auto !important;
 }
@@ -1404,7 +1404,9 @@ i::before,i::after{
    .side-menu .inner-wrapper {
       padding: 2rem 3.5rem;
    }
-
+   .dropdown-menu:after{
+      top:32px;
+   }
 }
 @media (min-width: 1025px) and (max-width: 1091px) {
    .navbar-nav.ml-auto {
@@ -4376,7 +4378,7 @@ html{
 
 .latest-book-height{
    margin: 0px auto !important;
-   height:400px;
+   height:450px;
    width: 400px !important;
    padding:40px 45px !important;
 }
@@ -4384,7 +4386,7 @@ html{
 @media (max-width: 992px) {
    .latest-book-height{
       margin: 0px auto !important;
-      height:350px;
+      height:400px;
       width:350px !important;
       padding:50px 45px 10px  45px !important;
    }
@@ -4394,7 +4396,7 @@ html{
 @media (max-width:400px){
    .latest-book-height{
       margin: 0px auto !important;
-      height:300px !important;
+      height:350px !important;
       width:300px !important;
       padding: 40px 45px !important;
    }
@@ -4412,10 +4414,14 @@ html{
 
 .programs h4{
    font-size: 1.15rem;
+   position: relative;
+   z-index: 1;
 }
 
 .programs p{
    font-size: 13px;
+   position: relative;
+   z-index: 1;
 }
 
 .sarkar-gumbad-bg{
@@ -4442,11 +4448,24 @@ html{
    background-size: cover;
 }
 
+/* .programs::after{
+   content: "";
+   position: absolute;
+   background: #000;
+   display: inline-block;
+	width: 0;
+   height: 3px;
+   bottom: 0; left: 0;
+   overflow: hidden;
+	-webkit-transition: all 0.5s cubic-bezier(0, 0, 0.2, 1);
+	-o-transition: all 0.5s cubic-bezier(0, 0, 0.2, 1);
+	transition: all 0.5s cubic-bezier(0, 0, 0.2, 1);
+} */
 
 /* 
 .programsBg{
 }
-
+*/
 .programsBg::after {
    content: "";
    background: rgba(0,0,0,.5);
@@ -4456,7 +4475,7 @@ html{
    right: 15px;
    top: 10px;
    bottom: 10px;
-} */
+} 
 .sliderCaption{
    font-size: 15px
 }
@@ -4675,7 +4694,8 @@ blockquote.blockquote {
 	box-shadow: 0 0px 5px 0px rgba(0, 0, 0, 0.1);
 }
 .news_item .news_desc{
-	padding:40px 30px;
+   padding:40px 30px;
+   min-height: 320px;
 }
 
 .meta-tags li, .meta-tags li a,

@@ -2,7 +2,14 @@ import React, { Component } from "react";
 import "font-awesome/css/font-awesome.min.css";
 import SearchBox from "../searchBox/SearchBox";
 import { FIRESTORE } from "../../constants/firebase/firebase";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
+import { store } from "../../redux/store/store";
+import {
+  speecher,
+  author,
+  personalityDetails
+} from "../../redux/actions/actions";
+import SnackBar from "../snackBar/SnackBar";
 
 class Header extends Component {
   constructor(props) {
@@ -11,9 +18,12 @@ class Header extends Component {
       isShow: false,
       speechers: [],
       authors: [],
-      personalities: []
+      personalities: [],
+      open: false,
+      message: ""
     };
     this.handleClose = this.handleClose.bind(this);
+    this.handleSnackBar = this.handleSnackBar.bind(this);
   }
 
   componentDidMount() {
@@ -22,46 +32,65 @@ class Header extends Component {
     this.fetchingPersonalities();
   }
 
+  handleCloseSnackBar = () => {
+    this.setState({
+      open: false,
+      message: ""
+    });
+  };
+
+  handleSnackBar(flag, message) {
+    this.setState({
+      open: flag,
+      message
+    });
+  }
+
   fetchingSpeechers = () => {
     let { speechers } = this.state;
-    FIRESTORE.collection("speechers").onSnapshot(snap => {
-      speechers = [];
-      snap.forEach(doc => {
-        var obj = {};
-        obj.id = doc.id;
-        obj.name = doc.data().name;
-        speechers.push(obj);
+    FIRESTORE.collection("speechers")
+      .orderBy("timeStamp", "asc")
+      .onSnapshot(snap => {
+        speechers = [];
+        snap.forEach(doc => {
+          var obj = {};
+          obj.id = doc.id;
+          obj.name = doc.data().name;
+          speechers.push(obj);
+        });
+        this.setState({ speechers });
       });
-      this.setState({ speechers });
-    });
   };
 
   fetchingAuthors = () => {
     let { authors } = this.state;
-    FIRESTORE.collection("authors").onSnapshot(snap => {
-      authors = [];
-      snap.forEach(doc => {
-        var obj = {};
-        obj.id = doc.id;
-        obj.name = doc.data().name;
-        authors.push(obj);
+    FIRESTORE.collection("authors")
+      .orderBy("timeStamp", "asc")
+      .onSnapshot(snap => {
+        authors = [];
+        snap.forEach(doc => {
+          var obj = {};
+          obj.id = doc.id;
+          obj.name = doc.data().name;
+          authors.push(obj);
+        });
+        this.setState({ authors });
       });
-      this.setState({ authors });
-    });
   };
 
   fetchingPersonalities = () => {
     let { personalities } = this.state;
-    FIRESTORE.collection("personalities").onSnapshot(snap => {
-      personalities = [];
-      snap.forEach(doc => {
-        var obj = {};
-        obj.id = doc.id;
-        obj.name = doc.data().name;
-        personalities.push(obj);
+    FIRESTORE.collection("personalities")
+      .orderBy("timeStamp", "asc")
+      .onSnapshot(snap => {
+        personalities = [];
+        snap.forEach(doc => {
+          var obj = doc.data();
+          obj.id = doc.id;
+          personalities.push(obj);
+        });
+        this.setState({ personalities });
       });
-      this.setState({ personalities });
-    });
   };
 
   handleClose(open) {
@@ -71,6 +100,7 @@ class Header extends Component {
   }
 
   render() {
+    console.clear();
     const { isShow, speechers, authors, personalities } = this.state;
 
     return (
@@ -78,7 +108,11 @@ class Header extends Component {
         <header className="site-header">
           <nav className="navbar navbar-expand-xl center-brand static-nav">
             <div className="container">
-              <a className="navbar-brand" href="index.html">
+              <a
+                className="navbar-brand"
+                href="false"
+                onClick={() => this.props.history.push("/")}
+              >
                 <img
                   src={require("../../images/logo-default.png")}
                   alt="logo"
@@ -140,17 +174,29 @@ class Header extends Component {
                               <a
                                 className="dropdown-item"
                                 key={"speechers" + index}
-                                href="#"
+                                href="false"
+                                onClick={() => {
+                                  store.dispatch(speecher(val.name));
+                                  this.props.history.push("/speecher");
+                                }}
                               >
                                 {val.name}
                               </a>
                             );
                           })
                         : ""}
+                      <div className="dropdown-divider" />
+                      <Link
+                        to="/bayans"
+                        className="dropdown-item"
+                        href="#latest-book"
+                      >
+                        All Bayans
+                      </Link>
                     </div>
                   </li>
                   <li className="nav-item has-sub dropdown">
-                    <Link
+                    <a
                       className="nav-link pagescroll drop"
                       id="navbarDropdown2"
                       data-toggle="dropdown"
@@ -163,7 +209,7 @@ class Header extends Component {
                       >
                         <i className="fa fa-angle-down" />
                       </span>
-                    </Link>
+                    </a>
                     <div
                       className="dropdown-menu zoom-in"
                       aria-labelledby="navbarDropdown2"
@@ -180,24 +226,49 @@ class Header extends Component {
                               <a
                                 className="dropdown-item"
                                 key={"authors" + index}
-                                href="#"
+                                href="false"
+                                onClick={() => {
+                                  store.dispatch(author(val.name));
+                                  this.props.history.push("/author");
+                                }}
                               >
                                 {val.name}
                               </a>
                             );
                           })
                         : ""}
+                      <div className="dropdown-divider" />
+                      <Link
+                        to="/books"
+                        className="dropdown-item"
+                        href="#latest-book"
+                      >
+                        All Books
+                      </Link>
                     </div>
                   </li>
                   <li className="nav-item">
-                    <Link className="nav-link pagescroll" to="/#programs">
+                    <Link
+                      className="nav-link pagescroll"
+                      to="/events"
+                      onClick={() => this.props.history.push("/events")}
+                    >
                       EVENTS
                     </Link>
                   </li>
                 </ul>
                 <ul className="navbar-nav ml-auto">
                   <li className="nav-item">
-                    <a className="nav-link pagescroll" href="#our-pricings">
+                    <a
+                      className="nav-link pagescroll"
+                      href="false"
+                      onClick={() =>
+                        this.setState({
+                          open: true,
+                          message: "This feature will be available soon"
+                        })
+                      }
+                    >
                       IFTA
                     </a>
                   </li>
@@ -220,19 +291,25 @@ class Header extends Component {
                       className="dropdown-menu zoom-in"
                       aria-labelledby="navbarDropdown3"
                     >
-                      <Link className="dropdown-item" to="/#latest-book">
+                      {/* <Link className="dropdown-item" to="/#latest-book">
                         ABOUT US
                       </Link>
                       {personalities.length > 0 && (
                         <div className="dropdown-divider" />
-                      )}
+                      )} */}
                       {personalities.length > 0
                         ? personalities.map((val, index) => {
                             return (
                               <a
                                 className="dropdown-item"
                                 key={"authors" + index}
-                                href="#"
+                                href="false"
+                                onClick={() => {
+                                  store.dispatch(personalityDetails(val));
+                                  this.props.history.push(
+                                    "/personality-details"
+                                  );
+                                }}
                               >
                                 {val.name}
                               </a>
@@ -252,7 +329,7 @@ class Header extends Component {
                   <li className="nav-item">
                     <a
                       className="nav-link pagescroll"
-                      href="javascript:void(0)"
+                      href="false"
                       onClick={() => this.setState({ isShow: true })}
                     >
                       <i className="fa fa-search" />
@@ -264,9 +341,14 @@ class Header extends Component {
           </nav>
         </header>
         <SearchBox overlayShow={isShow} searchBar={this.handleClose} />
+        <SnackBar
+          handleClose={this.handleCloseSnackBar}
+          message={this.state.message}
+          open={this.state.open}
+        />
       </div>
     );
   }
 }
 
-export default Header;
+export default withRouter(Header);

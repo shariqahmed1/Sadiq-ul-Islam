@@ -1,19 +1,23 @@
 import React, { Component } from "react";
 import Routes from "./routes/Routes";
-import { Provider } from "react-redux";
-import { store, persistor } from "./redux/store/store";
-import { PersistGate } from "redux-persist/integration/react";
-import PreLoader from "./components/preloader/Preloader";
+import { FIRESTORE } from "./constants/firebase/firebase";
+import { bayans, events, books } from "./redux/actions/actions";
 
 class App extends Component {
+  componentDidMount() {
+    this.fetchBayans();
+    this.fetchBooks();
+    this.fetchEvents();
+  }
+
+  fetchBayans() {}
+
+  fetchBooks() {}
+
+  fetchEvents() {}
+
   render() {
-    return (
-      <Provider store={store}>
-        <PersistGate loading={<PreLoader />} persistor={persistor}>
-          <Routes />
-        </PersistGate>
-      </Provider>
-    );
+    return <Routes />;
   }
 }
 

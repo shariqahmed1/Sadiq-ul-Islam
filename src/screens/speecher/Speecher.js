@@ -2,118 +2,136 @@ import React, { Component } from "react";
 import "font-awesome/css/font-awesome.min.css";
 import OthersPageHeader from "../../components/othersPageHeader/OthersPageHeader";
 import PageHeader from "../../components/pageHeader/PageHeader";
-import Contact from "../../components/contact/Contact";
 import Footer from "../../components/footer/Footer";
 import { Link } from "react-router-dom";
 import { store } from "../../redux/store/store";
 import "../404/style.css";
 import { FIRESTORE } from "../../constants/firebase/firebase";
-import _ from "lodash";
-import { bookDetails } from "../../redux/actions/actions";
+// import _ from "lodash";
+import { bayanDetails } from "../../redux/actions/actions";
 
-class Bayans extends Component {
+class Speecher extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoading: true,
       isPagination: false,
-      books: [],
+      bayans: [],
       limit: 9,
       total: 0,
       pages: [],
       activePages: [],
-      activeIndex: 1
+      activeIndex: 1,
+      speecherName: ""
     };
   }
 
   componentDidMount() {
-    this.fetchBooks();
-    this.fetchLimits();
+    let state = store.getState().AuthReducer;
+    if (state) {
+      if (state.speecherName) {
+        this.setState({
+          speecherName: state.speecherName
+        });
+        this.fetchBayans(state.speecherName);
+        // this.fetchLimits(state.speecherName);
+      } else {
+        this.props.history.push("/");
+      }
+    } else {
+      this.props.history.push("/");
+    }
   }
 
-  fetchBooks() {
-    let { books } = this.state;
-    FIRESTORE.collection("books")
-      .orderBy("index", "desc")
-      .limit(9)
+  fetchBayans(speecherName) {
+    let { bayans } = this.state;
+    FIRESTORE.collection("bayans")
+      .where("speecherName", "==", speecherName)
+      // .orderBy("speecherName")
+      // .orderBy("index", "desc")
+      // .limit(9)
       .onSnapshot(snapshot => {
-        books = [];
+        bayans = [];
         if (snapshot.empty) {
           this.props.history.push("/");
         } else {
           snapshot.forEach(doc => {
             var obj = doc.data();
             obj.id = doc.id;
-            books.push(obj);
+            bayans.push(obj);
           });
           this.setState({
-            books,
+            bayans,
             isLoading: false
           });
         }
       });
   }
 
-  fetchLimits() {
-    FIRESTORE.collection("books")
-      .orderBy("index", "desc")
-      .onSnapshot(snapshot => {
-        this.setState({
-          total: snapshot.size
-        });
-        this.calculatePagination(snapshot.size);
-      });
-  }
+  // fetchLimits(speecherName) {
+  //   FIRESTORE.collection("bayans")
+  //     .where("speecherName", ">=", speecherName)
+  //     .orderBy("speecherName")
+  //     .orderBy("index", "desc")
+  //     .onSnapshot(snapshot => {
+  //       this.setState({
+  //         total: snapshot.size
+  //       });
+  //       this.calculatePagination(snapshot.size);
+  //     });
+  // }
 
-  fetchByPagination(pageNum) {
-    let { books, total } = this.state;
-    let startAt = total - pageNum * 9;
-    let endAt = startAt + 9;
-    this.setState({
-      isLoading: true
-    });
-    FIRESTORE.collection("books")
-      .orderBy("index")
-      .startAt(startAt + 1)
-      .endAt(endAt)
-      .get()
-      .then(snapshot => {
-        books = [];
-        snapshot.forEach(doc => {
-          books.push(doc.data());
-        });
-        let reverse = _.reverse(books);
-        this.setState({
-          books: reverse,
-          isLoading: false,
-          activeIndex: pageNum
-        });
-      });
-  }
+  // fetchByPagination(pageNum) {
+  //   let { bayans, total, speecherName } = this.state;
+  //   let startAt = total - pageNum * 9;
+  //   let endAt = startAt + 9;
+  //   this.setState({
+  //     isLoading: true
+  //   });
+  //   FIRESTORE.collection("bayans")
+  //     .where("speecherName", "==", speecherName)
+  //     .orderBy("index")
+  //     .startAt(startAt + 1)
+  //     .endAt(endAt)
+  //     .get()
+  //     .then(snapshot => {
+  //       bayans = [];
+  //       snapshot.forEach(doc => {
+  //         bayans.push(doc.data());
+  //       });
+  //       let reverse = _.reverse(bayans);
+  //       this.setState({
+  //         bayans: reverse,
+  //         isLoading: false,
+  //         activeIndex: pageNum
+  //       });
+  //     });
+  // }
 
-  calculatePagination(size) {
-    let { pages } = this.state;
-    pages = [];
-    let dvd = size / 9;
-    let ceil = Math.ceil(dvd);
-    for (let index = 1; index <= ceil; index++) {
-      pages.push(index);
-    }
-    this.setState({
-      pages,
-      isPagination: true,
-      activePages: pages.slice(0, 3)
-    });
-  }
+  // calculatePagination(size) {
+  //   let { pages } = this.state;
+  //   pages = [];
+  //   let dvd = size / 9;
+  //   let ceil = Math.ceil(dvd);
+  //   for (let index = 1; index <= ceil; index++) {
+  //     pages.push(index);
+  //   }
+  //   this.setState({
+  //     pages,
+  //     isPagination: true,
+  //     activePages: pages.slice(0, 3)
+  //   });
+  // }
 
   render() {
     const {
       isLoading,
-      books,
+      bayans,
       pages,
       activePages,
       isPagination,
-      activeIndex
+      activeIndex,
+      speecherName
     } = this.state;
     const length = pages.length;
     const activePagelength = activePages.length;
@@ -125,7 +143,7 @@ class Bayans extends Component {
 
         {/* <!--PageHeader--> */}
         <PageHeader
-          title={"Books"}
+          title={"Bayans"}
           data={[
             {
               title: "Home",
@@ -133,9 +151,9 @@ class Bayans extends Component {
               link: "/"
             },
             {
-              title: "Books",
+              title: speecherName,
               isActive: true,
-              link: "/books"
+              link: "/speecher"
             }
           ]}
         />
@@ -183,7 +201,7 @@ class Bayans extends Component {
                       </div>
                     );
                   })
-                : books.map((v, i) => {
+                : bayans.map((v, i) => {
                     return (
                       <div
                         key={i}
@@ -197,25 +215,28 @@ class Bayans extends Component {
                         <div class="cbp-item-wrapper">
                           <div class="news_item shadow">
                             <a class="image" href="javascript:void(0)">
-                              <img
-                                src={v.url}
-                                alt="Latest News"
-                                class="img-responsive bayans"
+                              <iframe
+                                className="img-responsive bayans"
+                                title={"bayans" + i}
+                                scrolling="no"
+                                frameBorder="no"
+                                allow="autoplay"
+                                src={v.embed}
                               />
                             </a>
+                            <h5
+                              style={{
+                                fontSize: 16,
+                                fontWeight: 400,
+                                marginTop: 10
+                              }}
+                            >
+                              {v.speecherName}
+                            </h5>
                             <div class="news_desc">
                               <h3 class="text-capitalize font-light darkcolor">
                                 <a href="javascript:void(0)">{v.title}</a>
                               </h3>
-                              <h5
-                                style={{
-                                  fontSize: 16,
-                                  fontWeight: 400,
-                                  marginTop: 10
-                                }}
-                              >
-                                {v.author}
-                              </h5>
                               <p
                                 class="top20 bottom35"
                                 dangerouslySetInnerHTML={{
@@ -227,10 +248,10 @@ class Bayans extends Component {
                                 }}
                               />
                               <Link
-                                to="/book-details"
+                                to="/bayan-details"
                                 class="button btnprimary btn-gradient-hvr"
                                 onClick={() => {
-                                  store.dispatch(bookDetails(v));
+                                  store.dispatch(bayanDetails(v));
                                 }}
                               >
                                 Read more
@@ -242,32 +263,6 @@ class Bayans extends Component {
                     );
                   })}
             </div>
-            {/* //   <div class="cbp-item" style={{ width: 350, left: 0, top: 0 }}>
-            //     <div class="cbp-item-wrapper">
-            //       <div class="news_item shadow">
-            //         <a class="image" href="blog-detail.html">
-                      
-            //         </a>
-            //         <div class="news_desc">
-            //           <h3 class="text-capitalize font-light darkcolor">
-            //             <a href="blog-detail.html">Book Title</a>
-            //           </h3>
-            //           <p class="top20 bottom35">
-            //             Book Desc Lorem Ipsum is simply dummy text of the
-            //             printing and typesetting industry. Lorem Ipsum has been
-            //             the industry's standard dummy text ever since the 1500s
-            //           </p>
-            //           <Link
-            //             to="/book-details"
-            //             class="button btnprimary btn-gradient-hvr"
-            //           >
-            //             Read more
-            //           </Link>
-            //         </div>
-            //       </div>
-            //     </div>
-            //   </div>
-            // </div> */}
             {isPagination && (
               <div class="row">
                 <div class="col-sm-12">
@@ -299,6 +294,7 @@ class Bayans extends Component {
                     {activePages.map(v => {
                       return (
                         <li
+                          key={v}
                           className={
                             activeIndex === v ? "page-item active" : "page-item"
                           }
@@ -337,39 +333,11 @@ class Bayans extends Component {
                 </div>
               </div>
             )}
-            {/* <div class="row">
-              <div class="col-sm-12">
-                <ul class="pagination justify-content-center top50">
-                  <li class="page-item">
-                    <a class="page-link" href="#">
-                      <i class="fa fa-angle-left" />
-                    </a>
-                  </li>
-                  <li class="page-item active">
-                    <a class="page-link" href="#">
-                      1
-                    </a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">
-                      2
-                    </a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">
-                      3
-                    </a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">
-                      <i class="fa fa-angle-right" />
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div> */}
           </div>
         </section>
+
+        {/* <!--Contact--> */}
+        {/* <Contact /> */}
 
         {/* <!--Footer--> */}
         <Footer />
@@ -378,4 +346,4 @@ class Bayans extends Component {
   }
 }
 
-export default Bayans;
+export default Speecher;

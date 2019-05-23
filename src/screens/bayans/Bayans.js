@@ -4,9 +4,121 @@ import OthersPageHeader from "../../components/othersPageHeader/OthersPageHeader
 import PageHeader from "../../components/pageHeader/PageHeader";
 import Footer from "../../components/footer/Footer";
 import { Link } from "react-router-dom";
+import { store } from "../../redux/store/store";
+import "../404/style.css";
+import { FIRESTORE } from "../../constants/firebase/firebase";
+import _ from "lodash";
+import { bayanDetails } from "../../redux/actions/actions";
 
 class Bayans extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true,
+      isPagination: false,
+      bayans: [],
+      limit: 9,
+      total: 0,
+      pages: [],
+      activePages: [],
+      activeIndex: 1,
+      showMsg: false,
+      open: true
+    };
+  }
+
+  componentDidMount() {
+    this.fetchBayans();
+    this.fetchLimits();
+  }
+
+  fetchBayans() {
+    let { bayans } = this.state;
+    FIRESTORE.collection("bayans")
+      .orderBy("index", "desc")
+      .limit(9)
+      .onSnapshot(snapshot => {
+        bayans = [];
+        if (snapshot.empty) {
+          this.props.history.push("/");
+        } else {
+          snapshot.forEach(doc => {
+            var obj = doc.data();
+            obj.id = doc.id;
+            bayans.push(obj);
+          });
+          this.setState({
+            bayans,
+            isLoading: false
+          });
+        }
+      });
+  }
+
+  fetchLimits() {
+    FIRESTORE.collection("bayans")
+      .orderBy("index", "desc")
+      .onSnapshot(snapshot => {
+        this.setState({
+          total: snapshot.size
+        });
+        this.calculatePagination(snapshot.size);
+      });
+  }
+
+  fetchByPagination(pageNum) {
+    let { bayans, total } = this.state;
+    let startAt = total - pageNum * 9;
+    let endAt = startAt + 9;
+    this.setState({
+      isLoading: true
+    });
+    FIRESTORE.collection("bayans")
+      .orderBy("index")
+      .startAt(startAt + 1)
+      .endAt(endAt)
+      .get()
+      .then(snapshot => {
+        bayans = [];
+        snapshot.forEach(doc => {
+          bayans.push(doc.data());
+        });
+        let reverse = _.reverse(bayans);
+        this.setState({
+          bayans: reverse,
+          isLoading: false,
+          activeIndex: pageNum
+        });
+      });
+  }
+
+  calculatePagination(size) {
+    let { pages } = this.state;
+    pages = [];
+    let dvd = size / 9;
+    let ceil = Math.ceil(dvd);
+    for (let index = 1; index <= ceil; index++) {
+      pages.push(index);
+    }
+    this.setState({
+      pages,
+      isPagination: true,
+      activePages: pages.slice(0, 3)
+    });
+  }
+
   render() {
+    const {
+      isLoading,
+      bayans,
+      pages,
+      activePages,
+      isPagination,
+      activeIndex
+    } = this.state;
+    const length = pages.length;
+    const activePagelength = activePages.length;
+    console.clear();
     return (
       <div>
         {/* <!-- header --> */}
@@ -28,82 +140,186 @@ class Bayans extends Component {
             }
           ]}
         />
-        <section id="our-blog" class="bglight padding text-center">
-          <div class="container">
+        <section id="our-blog" className="bglight padding text-center">
+          <div className="container">
             <div
-            // id="blog-measonry"
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                justifyContent: "center"
+              }}
             >
-              <div class="cbp-item" style={{ width: 350, left: 0, top: 0 }}>
-                <div class="cbp-item-wrapper">
-                  <div class="news_item shadow">
-                    <a class="image" href="javascript:void(0)">
-                      {/* <img
-                        src={require("../../images/blog-measonry1.jpg")}
-                        alt="Latest News"
-                        class="img-responsive"
-                      /> */}
-                      <iframe
-                        className="img-responsive bayans"
-                        title={"bayans"}
-                        scrolling="no"
-                        frameBorder="no"
-                        allow="autoplay"
-                        src={
-                          "https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/158012399&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true"
-                        }
-                      />
-                    </a>
-                    <div class="news_desc">
-                      <h3 class="text-capitalize font-light darkcolor">
-                        <a href="blog-detail.html">Bayan Title</a>
-                      </h3>
-                      <p class="top20 bottom35">
-                        Bayan Desc Lorem Ipsum is simply dummy text of the
-                        printing and typesetting industry. Lorem Ipsum has been
-                        the industry's standard dummy text ever since the 1500s
-                      </p>
-                      <Link
-                        to="/bayan-details"
-                        class="button btnprimary btn-gradient-hvr"
+              {isLoading
+                ? [0, 1, 2].map(v => {
+                    return (
+                      <div
+                        key={"bayans-" + v}
+                        className="cbp-item"
+                        style={{
+                          width: 350,
+                          left: 0,
+                          top: 0
+                        }}
                       >
-                        Read more
-                      </Link>
-                    </div>
-                  </div>
+                        <div className="cbp-item-wrapper">
+                          <div className="news_item shadow">
+                            <a className="image" href="javascript:void(0)">
+                              <div
+                                className="loader-details-bayan"
+                                style={{ height: 250 }}
+                              />
+                            </a>
+                            <div className="news_desc">
+                              <h3 className="text-capitalize font-light darkcolor">
+                                <a href="javascript:void(0)">
+                                  <div className="loader-title-line" />
+                                </a>
+                              </h3>
+                              <p className="top20 bottom35">
+                                <div className="loader-desc-line" />
+                                <div className="loader-desc-line" />
+                                <div className="loader-desc-line" />
+                                <div className="loader-desc-line" />
+                                <div className="loader-desc-line" />
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+                : bayans.map((v, i) => {
+                    return (
+                      <div
+                        key={i}
+                        className="cbp-item"
+                        style={{
+                          width: 350,
+                          left: 0,
+                          top: 0
+                        }}
+                      >
+                        <div className="cbp-item-wrapper">
+                          <div className="news_item shadow">
+                            <a className="image" href="javascript:void(0)">
+                              <iframe
+                                className="img-responsive bayans"
+                                title={"bayans" + i}
+                                scrolling="no"
+                                frameBorder="no"
+                                allow="autoplay"
+                                src={v.embed}
+                              />
+                            </a>
+                            <h5
+                              style={{
+                                fontSize: 16,
+                                fontWeight: 400,
+                                marginTop: 10
+                              }}
+                            >
+                              {v.speecherName}
+                            </h5>
+                            <div className="news_desc">
+                              <h3 className="text-capitalize font-light darkcolor">
+                                <a href="javascript:void(0)">{v.title}</a>
+                              </h3>
+                              <p
+                                className="top20 bottom35"
+                                dangerouslySetInnerHTML={{
+                                  __html: v.description
+                                    ? v.description.length > 160
+                                      ? `${v.description.substr(0, 160)}...`
+                                      : v.description
+                                    : "Bayan Desc Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
+                                }}
+                              />
+                              <Link
+                                to="/bayan-details"
+                                className="button btnprimary btn-gradient-hvr"
+                                onClick={() => {
+                                  store.dispatch(bayanDetails(v));
+                                }}
+                              >
+                                Read more
+                              </Link>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+            </div>
+            {isPagination && (
+              <div className="row">
+                <div className="col-sm-12">
+                  <ul
+                    className="pagination justify-content-center top50"
+                    style={{ display: "flex" }}
+                  >
+                    <li
+                      className={
+                        activePages[0] === pages[0]
+                          ? "page-item disabled"
+                          : "page-item"
+                      }
+                      onClick={() => {
+                        activePages[0] !== pages[0]
+                          ? this.setState({
+                              activePages: pages.slice(
+                                activePages[0] - 4,
+                                activePages[0] - 1
+                              )
+                            })
+                          : console.log("No Pages");
+                      }}
+                    >
+                      <a className="page-link" href="javascript:void(0)">
+                        <i className="fa fa-angle-left" />
+                      </a>
+                    </li>
+                    {activePages.map((v, i) => {
+                      return (
+                        <li
+                          className={
+                            activeIndex === v ? "page-item active" : "page-item"
+                          }
+                          onClick={() =>
+                            activeIndex !== v && this.fetchByPagination(v)
+                          }
+                          key={"row-" + i}
+                        >
+                          <a className="page-link" href="javascript:void(0)">
+                            {v}
+                          </a>
+                        </li>
+                      );
+                    })}
+                    <li
+                      className={
+                        activePages[activePagelength - 1] === pages[length - 1]
+                          ? "page-item disabled"
+                          : "page-item"
+                      }
+                      onClick={() => {
+                        activePages[activePagelength - 1] !== pages[length - 1]
+                          ? this.setState({
+                              activePages: pages.slice(
+                                activePages[activePagelength - 1],
+                                activePages[activePagelength - 1] + 3
+                              )
+                            })
+                          : console.log("No Pages");
+                      }}
+                    >
+                      <a className="page-link" href="javascript:void(0)">
+                        <i className="fa fa-angle-right" />
+                      </a>
+                    </li>
+                  </ul>
                 </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-sm-12">
-                <ul class="pagination justify-content-center top50">
-                  <li class="page-item">
-                    <a class="page-link" href="#">
-                      <i class="fa fa-angle-left" />
-                    </a>
-                  </li>
-                  <li class="page-item active">
-                    <a class="page-link" href="#">
-                      1
-                    </a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">
-                      2
-                    </a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">
-                      3
-                    </a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">
-                      <i class="fa fa-angle-right" />
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
+            )}
           </div>
         </section>
 

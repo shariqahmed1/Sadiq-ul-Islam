@@ -6,56 +6,61 @@ import Bayans from "../screens/bayans/Bayans";
 import Books from "../screens/books/Books";
 import BookDetails from "../screens/bookDetails/BookDetails";
 import BayanDetails from "../screens/bayanDetails/BayanDetails";
+import EventDetails from "../screens/eventDetails/EventDetails";
+import PersonalityDetails from "../screens/personalityDetails/PersonalityDetails";
+import Error404 from "../screens/404/404";
+import Speecher from "../screens/speecher/Speecher";
+import Author from "../screens/author/Author";
+import Events from "../screens/events/Events";
 
 const history = createBrowserHistory();
 
 class Routes extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      login: false
-    };
-  }
-
-  static getDerivedStateFromProps(nextProps) {
-    return {
-      login: nextProps.isLogin
-    };
-  }
+  state = {
+    open: false,
+    message: ""
+  };
 
   render() {
-    // const { login } = this.state;
+    console.clear();
     return (
       <Router history={history}>
-        <div>
+        <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/bayans" component={Bayans} />
           <Route path="/bayan-details" component={BayanDetails} />
+          {/* <Route path="/bayan-details/:id" component={BayanDetails} /> */}
           <Route exact path="/books" component={Books} />
           <Route path="/book-details" component={BookDetails} />
-        </div>
+          <Route exact path="/speecher" component={Speecher} />
+          <Route exact path="/author" component={Author} />
+          <Route exact path="/events" component={Events} />
+          <Route path="/event-details" component={EventDetails} />
+          <Route path="/personality-details" component={PersonalityDetails} />
+          <Route exact path="/*" component={Error404} />
+        </Switch>
       </Router>
     );
   }
 }
 
-const PrivateRoute = ({ component: Component, login, ...rest }) => {
-  return (
-    <Route
-      {...rest}
-      render={props =>
-        login ? (
-          <Component {...props} />
-        ) : (
-          <Redirect
-            to={{
-              pathname: "/login"
-            }}
-          />
-        )
-      }
-    />
-  );
-};
+// const PrivateRoute = ({ component: Component, login, ...rest }) => {
+//   return (
+//     <Route
+//       {...rest}
+//       render={props =>
+//         login ? (
+//           <Component {...props} />
+//         ) : (
+//           <Redirect
+//             to={{
+//               pathname: "/login"
+//             }}
+//           />
+//         )
+//       }
+//     />
+//   );
+// };
 
 export default Routes;

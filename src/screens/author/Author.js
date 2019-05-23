@@ -11,7 +11,7 @@ import { FIRESTORE } from "../../constants/firebase/firebase";
 import _ from "lodash";
 import { bookDetails } from "../../redux/actions/actions";
 
-class Bayans extends Component {
+class Author extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,20 +22,35 @@ class Bayans extends Component {
       total: 0,
       pages: [],
       activePages: [],
-      activeIndex: 1
+      activeIndex: 1,
+      authorName: ""
     };
   }
 
   componentDidMount() {
-    this.fetchBooks();
-    this.fetchLimits();
+    let state = store.getState().AuthReducer;
+    if (state) {
+      if (state.authorName) {
+        this.setState({
+          authorName: state.authorName
+        });
+        this.fetchBooks(state.authorName);
+        // this.fetchLimits(state.authorName);
+      } else {
+        this.props.history.push("/");
+      }
+    } else {
+      this.props.history.push("/");
+    }
   }
 
-  fetchBooks() {
+  fetchBooks(authorName) {
     let { books } = this.state;
     FIRESTORE.collection("books")
-      .orderBy("index", "desc")
-      .limit(9)
+      .where("author", "==", authorName)
+      // .orderBy("author")
+      // .orderBy("index", "desc")
+      // .limit(9)
       .onSnapshot(snapshot => {
         books = [];
         if (snapshot.empty) {
@@ -54,57 +69,60 @@ class Bayans extends Component {
       });
   }
 
-  fetchLimits() {
-    FIRESTORE.collection("books")
-      .orderBy("index", "desc")
-      .onSnapshot(snapshot => {
-        this.setState({
-          total: snapshot.size
-        });
-        this.calculatePagination(snapshot.size);
-      });
-  }
+  // fetchLimits(authorName) {
+  //   FIRESTORE.collection("books")
+  //     .where("author", ">=", authorName)
+  //     .orderBy("author")
+  //     .orderBy("index", "desc")
+  //     .onSnapshot(snapshot => {
+  //       this.setState({
+  //         total: snapshot.size
+  //       });
+  //       this.calculatePagination(snapshot.size);
+  //     });
+  // }
 
-  fetchByPagination(pageNum) {
-    let { books, total } = this.state;
-    let startAt = total - pageNum * 9;
-    let endAt = startAt + 9;
-    this.setState({
-      isLoading: true
-    });
-    FIRESTORE.collection("books")
-      .orderBy("index")
-      .startAt(startAt + 1)
-      .endAt(endAt)
-      .get()
-      .then(snapshot => {
-        books = [];
-        snapshot.forEach(doc => {
-          books.push(doc.data());
-        });
-        let reverse = _.reverse(books);
-        this.setState({
-          books: reverse,
-          isLoading: false,
-          activeIndex: pageNum
-        });
-      });
-  }
+  // fetchByPagination(pageNum) {
+  //   let { books, total, authorName } = this.state;
+  //   let startAt = total - pageNum * 9;
+  //   let endAt = startAt + 9;
+  //   this.setState({
+  //     isLoading: true
+  //   });
+  //   FIRESTORE.collection("books")
+  //     .where("author", "==", authorName)
+  //     .orderBy("index")
+  //     .startAt(startAt + 1)
+  //     .endAt(endAt)
+  //     .get()
+  //     .then(snapshot => {
+  //       books = [];
+  //       snapshot.forEach(doc => {
+  //         books.push(doc.data());
+  //       });
+  //       let reverse = _.reverse(books);
+  //       this.setState({
+  //         books: reverse,
+  //         isLoading: false,
+  //         activeIndex: pageNum
+  //       });
+  //     });
+  // }
 
-  calculatePagination(size) {
-    let { pages } = this.state;
-    pages = [];
-    let dvd = size / 9;
-    let ceil = Math.ceil(dvd);
-    for (let index = 1; index <= ceil; index++) {
-      pages.push(index);
-    }
-    this.setState({
-      pages,
-      isPagination: true,
-      activePages: pages.slice(0, 3)
-    });
-  }
+  // calculatePagination(size) {
+  //   let { pages } = this.state;
+  //   pages = [];
+  //   let dvd = size / 9;
+  //   let ceil = Math.ceil(dvd);
+  //   for (let index = 1; index <= ceil; index++) {
+  //     pages.push(index);
+  //   }
+  //   this.setState({
+  //     pages,
+  //     isPagination: true,
+  //     activePages: pages.slice(0, 3)
+  //   });
+  // }
 
   render() {
     const {
@@ -113,11 +131,13 @@ class Bayans extends Component {
       pages,
       activePages,
       isPagination,
-      activeIndex
+      activeIndex,
+      authorName
     } = this.state;
     const length = pages.length;
     const activePagelength = activePages.length;
     console.clear();
+
     return (
       <div>
         {/* <!-- header --> */}
@@ -133,7 +153,7 @@ class Bayans extends Component {
               link: "/"
             },
             {
-              title: "Books",
+              title: authorName,
               isActive: true,
               link: "/books"
             }
@@ -242,32 +262,6 @@ class Bayans extends Component {
                     );
                   })}
             </div>
-            {/* //   <div class="cbp-item" style={{ width: 350, left: 0, top: 0 }}>
-            //     <div class="cbp-item-wrapper">
-            //       <div class="news_item shadow">
-            //         <a class="image" href="blog-detail.html">
-                      
-            //         </a>
-            //         <div class="news_desc">
-            //           <h3 class="text-capitalize font-light darkcolor">
-            //             <a href="blog-detail.html">Book Title</a>
-            //           </h3>
-            //           <p class="top20 bottom35">
-            //             Book Desc Lorem Ipsum is simply dummy text of the
-            //             printing and typesetting industry. Lorem Ipsum has been
-            //             the industry's standard dummy text ever since the 1500s
-            //           </p>
-            //           <Link
-            //             to="/book-details"
-            //             class="button btnprimary btn-gradient-hvr"
-            //           >
-            //             Read more
-            //           </Link>
-            //         </div>
-            //       </div>
-            //     </div>
-            //   </div>
-            // </div> */}
             {isPagination && (
               <div class="row">
                 <div class="col-sm-12">
@@ -299,6 +293,7 @@ class Bayans extends Component {
                     {activePages.map(v => {
                       return (
                         <li
+                          key={v}
                           className={
                             activeIndex === v ? "page-item active" : "page-item"
                           }
@@ -337,37 +332,6 @@ class Bayans extends Component {
                 </div>
               </div>
             )}
-            {/* <div class="row">
-              <div class="col-sm-12">
-                <ul class="pagination justify-content-center top50">
-                  <li class="page-item">
-                    <a class="page-link" href="#">
-                      <i class="fa fa-angle-left" />
-                    </a>
-                  </li>
-                  <li class="page-item active">
-                    <a class="page-link" href="#">
-                      1
-                    </a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">
-                      2
-                    </a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">
-                      3
-                    </a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">
-                      <i class="fa fa-angle-right" />
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div> */}
           </div>
         </section>
 
@@ -378,4 +342,4 @@ class Bayans extends Component {
   }
 }
 
-export default Bayans;
+export default Author;

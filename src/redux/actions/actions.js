@@ -37,9 +37,72 @@ export const personalities = personalities => {
   };
 };
 
+export const bookDetails = bookDetails => {
+  return {
+    type: "GET_BOOK_DETAILS",
+    bookDetails
+  };
+};
+
+export const bayanDetails = bayanDetails => {
+  return {
+    type: "GET_BAYAN_DETAILS",
+    bayanDetails
+  };
+};
+
+export const personalityDetails = personalityDetails => {
+  return {
+    type: "GET_PERSONALITY_DETAILS",
+    personalityDetails
+  };
+};
+
+export const eventDetails = eventDetails => {
+  return {
+    type: "GET_EVENT_DETAILS",
+    eventDetails
+  };
+};
+
+export const speecher = speecherName => {
+  return {
+    type: "GET_SPEECHER",
+    speecherName
+  };
+};
+
+export const author = authorName => {
+  return {
+    type: "GET_AUTHOR",
+    authorName
+  };
+};
+
 export const isLogin = flag => {
   return {
     type: "IS_LOGIN",
     isLogin: flag
+  };
+};
+
+export const bayans = bayans => {
+  return {
+    type: "BAYANS",
+    bayans
+  };
+};
+
+export const books = books => {
+  return {
+    type: "BOOKS",
+    books
+  };
+};
+
+export const events = events => {
+  return {
+    type: "EVENTS",
+    events
   };
 };

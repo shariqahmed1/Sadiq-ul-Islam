@@ -26,14 +26,15 @@ class App extends Component {
   }
 
   render() {
+    console.clear();
     const { sliders, isLoading } = this.state;
     return (
       <div
         id="carouselExampleIndicators"
-        class="carousel slide"
+        className="carousel slide"
         data-ride="carousel"
       >
-        <ol class="carousel-indicators">
+        <ol className="carousel-indicators">
           {!isLoading ? (
             sliders.length > 0 ? (
               sliders.map((val, index) => {
@@ -41,7 +42,8 @@ class App extends Component {
                   <li
                     data-target="#carouselExampleIndicators"
                     data-slide-to={index}
-                    class={`${index === 0 ? "active" : ""}`}
+                    key={"slider-" + index}
+                    className={`${index === 0 ? "active" : ""}`}
                   />
                 );
               })
@@ -49,18 +51,18 @@ class App extends Component {
               <li
                 data-target="#carouselExampleIndicators"
                 data-slide-to="0"
-                class="active"
+                className="active"
               />
             )
           ) : (
             <li
               data-target="#carouselExampleIndicators"
               data-slide-to="0"
-              class="active"
+              className="active"
             />
           )}
         </ol>
-        <div class="carousel-inner">
+        <div className="carousel-inner">
           {!isLoading ? (
             sliders.length > 0 ? (
               sliders.map((val, index) => {
@@ -68,14 +70,14 @@ class App extends Component {
                   <div class={`carousel-item ${index === 0 ? "active" : ""}`}>
                     <div className="sliderImg">
                       <img
-                        class="d-block sliderImage"
+                        className="d-block sliderImage"
                         src={val.data.url}
                         alt="First slide"
                       />
                     </div>
                     {val.data.caption && (
                       <div
-                        class="carousel-caption d-flex"
+                        className="carousel-caption d-flex"
                         style={{
                           alignItems: "center",
                           top: 0,
@@ -96,21 +98,42 @@ class App extends Component {
                 );
               })
             ) : (
-              <div class="carousel-item active">
+              <div className="carousel-item active">
                 <img
-                  class="d-block w-100"
-                  src="https://images3.alphacoders.com/823/82317.jpg"
+                  className="d-block"
+                  style={{
+                    width: "100%",
+                    height: "100vh",
+                    backgroundSize: "cover"
+                  }}
+                  src={require("../../images/sliderStatus.jpg")}
                   alt="First slide"
                 />
               </div>
             )
           ) : (
-            <div class="carousel-item active">
-              <img
-                class="d-block w-100"
-                src="https://images3.alphacoders.com/823/82317.jpg"
-                alt="First slide"
-              />
+            <div className="carousel-item active">
+              <div
+                style={{
+                  width: "100%",
+                  height: "100vh",
+                  backgoundColor: "#000",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                <img
+                  className="d-block"
+                  style={{
+                    width: 200,
+                    height: 200,
+                    backgroundSize: "cover"
+                  }}
+                  src={require("../../images/madarsa.gif")}
+                  alt="First slide"
+                />
+              </div>
             </div>
           )}
         </div>
