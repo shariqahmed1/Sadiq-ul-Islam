@@ -41,7 +41,7 @@ class OurWork extends Component {
   }
 
   render() {
-    console.clear();
+    // console.clear();
     return (
       <section id="video-parallax" className="video-parallax padding">
         <div className="container">

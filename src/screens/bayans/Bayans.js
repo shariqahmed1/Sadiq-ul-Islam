@@ -6,7 +6,6 @@ import Footer from "../../components/footer/Footer";
 import { Link } from "react-router-dom";
 import { store } from "../../redux/store/store";
 import "../404/style.css";
-import { FIRESTORE } from "../../constants/firebase/firebase";
 import _ from "lodash";
 import { bayanDetails } from "../../redux/actions/actions";
 
@@ -28,69 +27,20 @@ class Bayans extends Component {
   }
 
   componentDidMount() {
-    this.fetchBayans();
-    this.fetchLimits();
+    this.getStatesFromRedux();
+    store.subscribe(() => this.getStatesFromRedux());
   }
 
-  fetchBayans() {
-    let { bayans } = this.state;
-    FIRESTORE.collection("bayans")
-      .orderBy("index", "desc")
-      .limit(9)
-      .onSnapshot(snapshot => {
-        bayans = [];
-        if (snapshot.empty) {
-          this.props.history.push("/");
-        } else {
-          snapshot.forEach(doc => {
-            var obj = doc.data();
-            obj.id = doc.id;
-            bayans.push(obj);
-          });
-          this.setState({
-            bayans,
-            isLoading: false
-          });
-        }
-      });
-  }
-
-  fetchLimits() {
-    FIRESTORE.collection("bayans")
-      .orderBy("index", "desc")
-      .onSnapshot(snapshot => {
-        this.setState({
-          total: snapshot.size
-        });
-        this.calculatePagination(snapshot.size);
-      });
-  }
-
-  fetchByPagination(pageNum) {
-    let { bayans, total } = this.state;
-    let startAt = total - pageNum * 9;
-    let endAt = startAt + 9;
-    this.setState({
-      isLoading: true
-    });
-    FIRESTORE.collection("bayans")
-      .orderBy("index")
-      .startAt(startAt + 1)
-      .endAt(endAt)
-      .get()
-      .then(snapshot => {
-        bayans = [];
-        snapshot.forEach(doc => {
-          bayans.push(doc.data());
-        });
-        let reverse = _.reverse(bayans);
-        this.setState({
-          bayans: reverse,
-          isLoading: false,
-          activeIndex: pageNum
-        });
-      });
-  }
+  getStatesFromRedux = () => {
+    let { AuthReducer } = store.getState();
+    let bayans = AuthReducer
+      ? AuthReducer.bayans
+        ? _.sortBy(AuthReducer.bayans, ["timeStamp"]).reverse()
+        : this.props.history.push("/")
+      : this.props.history.push("/");
+    this.setState({ bayans, isLoading: false });
+    bayans.length > 0 && this.calculatePagination(bayans.length);
+  };
 
   calculatePagination(size) {
     let { pages } = this.state;
@@ -118,6 +68,10 @@ class Bayans extends Component {
     } = this.state;
     const length = pages.length;
     const activePagelength = activePages.length;
+    const sliceStartPoint =
+      activeIndex - 1 === 0 ? 0 : (activeIndex - 1) * 9 + 1;
+    const sliceEndPoint = sliceStartPoint + 9;
+    const sliceArr = bayans.slice(sliceStartPoint, sliceEndPoint);
     console.clear();
     return (
       <div>
@@ -188,7 +142,7 @@ class Bayans extends Component {
                       </div>
                     );
                   })
-                : bayans.map((v, i) => {
+                : sliceArr.map((v, i) => {
                     return (
                       <div
                         key={i}
@@ -284,8 +238,9 @@ class Bayans extends Component {
                           className={
                             activeIndex === v ? "page-item active" : "page-item"
                           }
-                          onClick={() =>
-                            activeIndex !== v && this.fetchByPagination(v)
+                          onClick={
+                            () => this.setState({ activeIndex: v })
+                            // activeIndex !== v && this.fetchByPagination(v)
                           }
                           key={"row-" + i}
                         >

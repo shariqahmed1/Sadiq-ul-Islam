@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "font-awesome/css/font-awesome.min.css";
 import SearchBox from "../searchBox/SearchBox";
-import { FIRESTORE } from "../../constants/firebase/firebase";
+// import { FIRESTORE } from "../../constants/firebase/firebase";
 import { Link, withRouter } from "react-router-dom";
 import { store } from "../../redux/store/store";
 import {
@@ -27,10 +27,37 @@ class Header extends Component {
   }
 
   componentDidMount() {
-    this.fetchingSpeechers();
-    this.fetchingAuthors();
-    this.fetchingPersonalities();
+    // this.fetchingSpeechers();
+    // this.fetchingAuthors();
+    // this.fetchingPersonalities();
+    this.getStatesFromRedux();
+    store.subscribe(() => this.getStatesFromRedux());
   }
+
+  getStatesFromRedux = () => {
+    let { AuthReducer } = store.getState();
+    let speechers = AuthReducer
+      ? AuthReducer.speechers
+        ? AuthReducer.speechers
+        : []
+      : [];
+    let authors = AuthReducer
+      ? AuthReducer.authors
+        ? AuthReducer.authors
+        : []
+      : [];
+    let personalities = AuthReducer
+      ? AuthReducer.personalities
+        ? AuthReducer.personalities
+        : []
+      : [];
+    this.setState({
+      speechers,
+      authors,
+      personalities
+    });
+    // console.log(store.getState().AuthReducer);
+  };
 
   handleCloseSnackBar = () => {
     this.setState({
@@ -46,52 +73,52 @@ class Header extends Component {
     });
   }
 
-  fetchingSpeechers = () => {
-    let { speechers } = this.state;
-    FIRESTORE.collection("speechers")
-      .orderBy("timeStamp", "asc")
-      .onSnapshot(snap => {
-        speechers = [];
-        snap.forEach(doc => {
-          var obj = {};
-          obj.id = doc.id;
-          obj.name = doc.data().name;
-          speechers.push(obj);
-        });
-        this.setState({ speechers });
-      });
-  };
+  // fetchingSpeechers = () => {
+  //   let { speechers } = this.state;
+  //   FIRESTORE.collection("speechers")
+  //     .orderBy("timeStamp", "asc")
+  //     .onSnapshot(snap => {
+  //       speechers = [];
+  //       snap.forEach(doc => {
+  //         var obj = {};
+  //         obj.id = doc.id;
+  //         obj.name = doc.data().name;
+  //         speechers.push(obj);
+  //       });
+  //       this.setState({ speechers });
+  //     });
+  // };
 
-  fetchingAuthors = () => {
-    let { authors } = this.state;
-    FIRESTORE.collection("authors")
-      .orderBy("timeStamp", "asc")
-      .onSnapshot(snap => {
-        authors = [];
-        snap.forEach(doc => {
-          var obj = {};
-          obj.id = doc.id;
-          obj.name = doc.data().name;
-          authors.push(obj);
-        });
-        this.setState({ authors });
-      });
-  };
+  // fetchingAuthors = () => {
+  //   let { authors } = this.state;
+  //   FIRESTORE.collection("authors")
+  //     .orderBy("timeStamp", "asc")
+  //     .onSnapshot(snap => {
+  //       authors = [];
+  //       snap.forEach(doc => {
+  //         var obj = {};
+  //         obj.id = doc.id;
+  //         obj.name = doc.data().name;
+  //         authors.push(obj);
+  //       });
+  //       this.setState({ authors });
+  //     });
+  // };
 
-  fetchingPersonalities = () => {
-    let { personalities } = this.state;
-    FIRESTORE.collection("personalities")
-      .orderBy("timeStamp", "asc")
-      .onSnapshot(snap => {
-        personalities = [];
-        snap.forEach(doc => {
-          var obj = doc.data();
-          obj.id = doc.id;
-          personalities.push(obj);
-        });
-        this.setState({ personalities });
-      });
-  };
+  // fetchingPersonalities = () => {
+  //   let { personalities } = this.state;
+  //   FIRESTORE.collection("personalities")
+  //     .orderBy("timeStamp", "asc")
+  //     .onSnapshot(snap => {
+  //       personalities = [];
+  //       snap.forEach(doc => {
+  //         var obj = doc.data();
+  //         obj.id = doc.id;
+  //         personalities.push(obj);
+  //       });
+  //       this.setState({ personalities });
+  //     });
+  // };
 
   handleClose(open) {
     this.setState({
@@ -100,7 +127,7 @@ class Header extends Component {
   }
 
   render() {
-    console.clear();
+    // console.clear();
     const { isShow, speechers, authors, personalities } = this.state;
 
     return (

@@ -260,7 +260,7 @@ class Contact extends Component {
   };
 
   render() {
-    console.clear();
+    // console.clear();
     return (
       <section id="contactus" className="padding_top parallaxie">
         <div className="container">

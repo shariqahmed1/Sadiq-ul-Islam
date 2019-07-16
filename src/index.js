@@ -7,6 +7,14 @@ import { store, persistor } from "./redux/store/store";
 import { PersistGate } from "redux-persist/integration/react";
 import PreLoader from "./components/preloader/Preloader";
 import * as serviceWorker from "./serviceWorker";
+import WebFont from "webfontloader";
+
+WebFont.load({
+  custom: {
+    families: ["Faiz Lahori Nastaleeq"],
+    urls: "./fonts/faiz-lahori-nastaleeq-regular-1.ttf"
+  }
+});
 
 const Container = () => (
   <Provider store={store}>
@@ -15,6 +23,12 @@ const Container = () => (
     </PersistGate>
   </Provider>
 );
+
+// const Container = () => (
+//   <Provider store={store}>
+//     <App />
+//   </Provider>
+// );
 
 ReactDOM.render(<Container />, document.getElementById("root"));
 

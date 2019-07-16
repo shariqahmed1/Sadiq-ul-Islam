@@ -4,7 +4,7 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 class SnackBar extends Component {
   render() {
-    console.clear();
+    // console.clear();
     return (
       <Snackbar
         anchorOrigin={{

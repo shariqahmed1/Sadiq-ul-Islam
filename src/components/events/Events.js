@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import { FIRESTORE } from "../../constants/firebase/firebase";
+// import { FIRESTORE } from "../../constants/firebase/firebase";
 import { Link } from "react-router-dom";
 import { eventDetails } from "../../redux/actions/actions";
 import { store } from "../../redux/store/store";
@@ -15,36 +15,45 @@ class Events extends Component {
   }
 
   componentDidMount() {
-    this.fetchEvents();
+    // this.fetchEvents();
+    this.getStatesFromRedux();
+    store.subscribe(() => this.getStatesFromRedux());
   }
 
-  fetchEvents() {
-    let { events } = this.state;
-    FIRESTORE.collection("events")
-      .where("isShowOnMainPage", "==", true)
-      .onSnapshot(snapshot => {
-        events = [];
-        if (!snapshot.empty) {
-          snapshot.forEach(doc => {
-            var obj = doc.data();
-            obj.id = doc.id;
-            events.push(obj);
-          });
-          this.setState({
-            events
-          });
-        }
-      });
-  }
+  getStatesFromRedux = () => {
+    let { AuthReducer } = store.getState();
+    let events = AuthReducer
+      ? AuthReducer.events
+        ? AuthReducer.events
+        : []
+      : [];
+    this.setState({ events });
+    // console.log(events);
+  };
+
+  // fetchEvents() {
+  //   let { events } = this.state;
+  //   FIRESTORE.collection("events")
+  //     .where("isShowOnMainPage", "==", true)
+  //     .onSnapshot(snapshot => {
+  //       events = [];
+  //       if (!snapshot.empty) {
+  //         snapshot.forEach(doc => {
+  //           var obj = doc.data();
+  //           obj.id = doc.id;
+  //           events.push(obj);
+  //         });
+  //         this.setState({
+  //           events
+  //         });
+  //       }
+  //     });
+  // }
 
   render() {
-    console.clear();
+    // console.clear();
     const { events } = this.state;
-    const sort = _.sortBy(events, [
-      function(o) {
-        return o.timeStamp;
-      }
-    ]);
+    const filterData = _.filter(events, { isShowOnMainPage: true });
     return (
       events.length > 0 && (
         <section id="programs" className="normal-padding bglight parallaxie">
@@ -60,9 +69,13 @@ class Events extends Component {
               </div>
             </div>
             <div className="row">
-              {sort.map((v, i) => {
+              {filterData.map((v, i) => {
                 return (
-                  <div className="col-lg-3 wow fadeIn" data-wow-delay="400ms">
+                  <div
+                    className="col-lg-3 wow fadeIn"
+                    key={i}
+                    data-wow-delay="400ms"
+                  >
                     <div
                       className="center programs text-center center-block"
                       style={{

@@ -26,7 +26,7 @@ class App extends Component {
   }
 
   render() {
-    console.clear();
+    // console.clear();
     const { sliders, isLoading } = this.state;
     return (
       <div

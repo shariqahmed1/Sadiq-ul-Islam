@@ -40,7 +40,6 @@ class Bayans extends Component {
   }
 
   render() {
-    console.log(data);
     const { isLoading, data } = this.state;
     return (
       <div>

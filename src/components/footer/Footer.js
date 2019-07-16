@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 
 class Footer extends Component {
   render() {
-    console.clear();
+    // console.clear();
     return (
       <footer id="site-footer" className="padding_half parallaxie">
         <div className="container">

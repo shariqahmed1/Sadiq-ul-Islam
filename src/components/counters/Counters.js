@@ -30,7 +30,7 @@ class Counters extends Component {
 
   render() {
     const { books, bayans } = this.state;
-    console.clear();
+    // console.clear();
     return (
       <section
         id="funfacts"

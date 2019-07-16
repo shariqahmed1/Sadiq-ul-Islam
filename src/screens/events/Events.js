@@ -5,10 +5,11 @@ import PageHeader from "../../components/pageHeader/PageHeader";
 import Footer from "../../components/footer/Footer";
 import { store } from "../../redux/store/store";
 import "../404/style.css";
-import { FIRESTORE } from "../../constants/firebase/firebase";
+// import { FIRESTORE } from "../../constants/firebase/firebase";
 // import _ from "lodash";
 import { eventDetails } from "../../redux/actions/actions";
 import axios from "axios";
+import _ from "lodash";
 import { withRouter } from "react-router-dom";
 // const instance = axios.create({
 //   baseURL: "https://us-central1-websadiqulislam.cloudfunctions.net",
@@ -26,8 +27,21 @@ class Events extends Component {
   }
 
   componentDidMount() {
-    this.fetchEvents();
+    // this.fetchEvents();
+    this.getStatesFromRedux();
+    store.subscribe(() => this.getStatesFromRedux());
   }
+
+  getStatesFromRedux = () => {
+    let { AuthReducer } = store.getState();
+    let events = AuthReducer
+      ? AuthReducer.events
+        ? _.sortBy(AuthReducer.events, ["timeStamp"]).reverse()
+        : this.props.history.push("/")
+      : this.props.history.push("/");
+    this.setState({ events, isLoading: false });
+  };
+
   sendMail() {
     // instance
     //   .post("/sendMail", {
@@ -71,25 +85,25 @@ class Events extends Component {
         console.log(error);
       });
   }
-  fetchEvents() {
-    let { events } = this.state;
-    FIRESTORE.collection("events").onSnapshot(snapshot => {
-      events = [];
-      if (snapshot.empty) {
-        this.props.history.push("/");
-      } else {
-        snapshot.forEach(doc => {
-          var obj = doc.data();
-          obj.id = doc.id;
-          events.push(obj);
-        });
-        this.setState({
-          events,
-          isLoading: false
-        });
-      }
-    });
-  }
+  // fetchEvents() {
+  //   let { events } = this.state;
+  //   FIRESTORE.collection("events").onSnapshot(snapshot => {
+  //     events = [];
+  //     if (snapshot.empty) {
+  //       this.props.history.push("/");
+  //     } else {
+  //       snapshot.forEach(doc => {
+  //         var obj = doc.data();
+  //         obj.id = doc.id;
+  //         events.push(obj);
+  //       });
+  //       this.setState({
+  //         events,
+  //         isLoading: false
+  //       });
+  //     }
+  //   });
+  // }
 
   render() {
     console.clear();

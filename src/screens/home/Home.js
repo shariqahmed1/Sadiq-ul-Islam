@@ -71,7 +71,7 @@ class Home extends Component {
   };
 
   render() {
-    console.clear();
+    // console.clear();
     return (
       <div>
         {/* <!--PreLoader--> */}

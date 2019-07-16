@@ -2,12 +2,10 @@ import React, { Component } from "react";
 import "font-awesome/css/font-awesome.min.css";
 import OthersPageHeader from "../../components/othersPageHeader/OthersPageHeader";
 import PageHeader from "../../components/pageHeader/PageHeader";
-import Contact from "../../components/contact/Contact";
 import Footer from "../../components/footer/Footer";
 import { Link } from "react-router-dom";
 import { store } from "../../redux/store/store";
 import "../404/style.css";
-import { FIRESTORE } from "../../constants/firebase/firebase";
 import _ from "lodash";
 import { bookDetails } from "../../redux/actions/actions";
 
@@ -27,69 +25,20 @@ class Bayans extends Component {
   }
 
   componentDidMount() {
-    this.fetchBooks();
-    this.fetchLimits();
+    this.getStatesFromRedux();
+    store.subscribe(() => this.getStatesFromRedux());
   }
 
-  fetchBooks() {
-    let { books } = this.state;
-    FIRESTORE.collection("books")
-      .orderBy("index", "desc")
-      .limit(9)
-      .onSnapshot(snapshot => {
-        books = [];
-        if (snapshot.empty) {
-          this.props.history.push("/");
-        } else {
-          snapshot.forEach(doc => {
-            var obj = doc.data();
-            obj.id = doc.id;
-            books.push(obj);
-          });
-          this.setState({
-            books,
-            isLoading: false
-          });
-        }
-      });
-  }
-
-  fetchLimits() {
-    FIRESTORE.collection("books")
-      .orderBy("index", "desc")
-      .onSnapshot(snapshot => {
-        this.setState({
-          total: snapshot.size
-        });
-        this.calculatePagination(snapshot.size);
-      });
-  }
-
-  fetchByPagination(pageNum) {
-    let { books, total } = this.state;
-    let startAt = total - pageNum * 9;
-    let endAt = startAt + 9;
-    this.setState({
-      isLoading: true
-    });
-    FIRESTORE.collection("books")
-      .orderBy("index")
-      .startAt(startAt + 1)
-      .endAt(endAt)
-      .get()
-      .then(snapshot => {
-        books = [];
-        snapshot.forEach(doc => {
-          books.push(doc.data());
-        });
-        let reverse = _.reverse(books);
-        this.setState({
-          books: reverse,
-          isLoading: false,
-          activeIndex: pageNum
-        });
-      });
-  }
+  getStatesFromRedux = () => {
+    let { AuthReducer } = store.getState();
+    let books = AuthReducer
+      ? AuthReducer.books
+        ? _.sortBy(AuthReducer.books, ["timeStamp"]).reverse()
+        : this.props.history.push("/")
+      : this.props.history.push("/");
+    this.setState({ books, isLoading: false });
+    books.length > 0 && this.calculatePagination(books.length);
+  };
 
   calculatePagination(size) {
     let { pages } = this.state;
@@ -117,6 +66,10 @@ class Bayans extends Component {
     } = this.state;
     const length = pages.length;
     const activePagelength = activePages.length;
+    const sliceStartPoint =
+      activeIndex - 1 === 0 ? 0 : (activeIndex - 1) * 9 + 1;
+    const sliceEndPoint = sliceStartPoint + 9;
+    const sliceArr = books.slice(sliceStartPoint, sliceEndPoint);
     console.clear();
     return (
       <div>
@@ -183,7 +136,7 @@ class Bayans extends Component {
                       </div>
                     );
                   })
-                : books.map((v, i) => {
+                : sliceArr.map((v, i) => {
                     return (
                       <div
                         key={i}
@@ -242,32 +195,7 @@ class Bayans extends Component {
                     );
                   })}
             </div>
-            {/* //   <div class="cbp-item" style={{ width: 350, left: 0, top: 0 }}>
-            //     <div class="cbp-item-wrapper">
-            //       <div class="news_item shadow">
-            //         <a class="image" href="blog-detail.html">
-                      
-            //         </a>
-            //         <div class="news_desc">
-            //           <h3 class="text-capitalize font-light darkcolor">
-            //             <a href="blog-detail.html">Book Title</a>
-            //           </h3>
-            //           <p class="top20 bottom35">
-            //             Book Desc Lorem Ipsum is simply dummy text of the
-            //             printing and typesetting industry. Lorem Ipsum has been
-            //             the industry's standard dummy text ever since the 1500s
-            //           </p>
-            //           <Link
-            //             to="/book-details"
-            //             class="button btnprimary btn-gradient-hvr"
-            //           >
-            //             Read more
-            //           </Link>
-            //         </div>
-            //       </div>
-            //     </div>
-            //   </div>
-            // </div> */}
+
             {isPagination && (
               <div class="row">
                 <div class="col-sm-12">
@@ -337,37 +265,6 @@ class Bayans extends Component {
                 </div>
               </div>
             )}
-            {/* <div class="row">
-              <div class="col-sm-12">
-                <ul class="pagination justify-content-center top50">
-                  <li class="page-item">
-                    <a class="page-link" href="#">
-                      <i class="fa fa-angle-left" />
-                    </a>
-                  </li>
-                  <li class="page-item active">
-                    <a class="page-link" href="#">
-                      1
-                    </a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">
-                      2
-                    </a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">
-                      3
-                    </a>
-                  </li>
-                  <li class="page-item">
-                    <a class="page-link" href="#">
-                      <i class="fa fa-angle-right" />
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div> */}
           </div>
         </section>
 

@@ -14,18 +14,19 @@ import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
 import InputBase from "@material-ui/core/InputBase";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
-import InboxIcon from "@material-ui/icons/Inbox";
+import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
 import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 import HeadsetIcon from "@material-ui/icons/Headset";
 import EventIcon from "@material-ui/icons/Event";
 import ClearIcon from "@material-ui/icons/Clear";
-import { FIRESTORE } from "../../constants/firebase/firebase";
+// import { FIRESTORE } from "../../constants/firebase/firebase";
 import { withRouter } from "react-router-dom";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import {
   bookDetails,
   bayanDetails,
-  eventDetails
+  eventDetails,
+  personalityDetails
 } from "../../redux/actions/actions";
 import { store } from "../../redux/store/store";
 
@@ -81,79 +82,110 @@ class SerachBox extends Component {
   }
 
   componentDidMount() {
-    this.fetchData();
+    // this.fetchData();
+    this.getStatesFromRedux();
+    store.subscribe(() => this.getStatesFromRedux());
   }
 
-  fetchData() {
-    this.fetchBayans();
-  }
+  getStatesFromRedux = () => {
+    let { AuthReducer } = store.getState();
+    let bayans = AuthReducer
+      ? AuthReducer.bayans
+        ? AuthReducer.bayans
+        : []
+      : [];
 
-  fetchBayans() {
-    FIRESTORE.collection("bayans")
-      .get()
-      .then(snapshot => {
-        if (!snapshot.empty) {
-          let arr = [];
-          snapshot.forEach(doc => {
-            var obj = doc.data();
-            obj.id = doc.id;
-            obj.searchType = "bayans";
-            arr.push(obj);
-          });
-          this.setState({ data: [arr, ...this.state.data] });
-        }
-      })
-      .then(() => {
-        this.fetchBooks();
-      })
-      .then(() => {
-        this.fetchEvents();
-      })
-      .catch(err => {
-        console.log(err.message);
-      });
-  }
+    let books = AuthReducer ? (AuthReducer.books ? AuthReducer.books : []) : [];
 
-  fetchBooks() {
-    FIRESTORE.collection("books")
-      .get()
-      .then(snapshot => {
-        if (!snapshot.empty) {
-          let arr = [];
-          snapshot.forEach(doc => {
-            var obj = doc.data();
-            obj.id = doc.id;
-            obj.searchType = "books";
-            arr.push(obj);
-          });
-          this.setState({ data: [arr, ...this.state.data] });
-        }
-      });
-  }
+    let events = AuthReducer
+      ? AuthReducer.events
+        ? AuthReducer.events
+        : []
+      : [];
 
-  fetchEvents() {
-    FIRESTORE.collection("events")
-      .get()
-      .then(snapshot => {
-        if (!snapshot.empty) {
-          let arr = [];
-          snapshot.forEach(doc => {
-            var obj = doc.data();
-            obj.id = doc.id;
-            obj.searchType = "events";
-            arr.push(obj);
-          });
-          this.setState({ data: [arr, ...this.state.data] });
-        }
-      });
-  }
+    let personalities = AuthReducer
+      ? AuthReducer.personalities
+        ? AuthReducer.personalities
+        : []
+      : [];
+
+    this.setState({
+      data: [...bayans, ...books, ...events, ...personalities]
+    });
+    // console.log(store.getState().AuthReducer);
+  };
+
+  // fetchData() {
+  //   this.fetchBayans();
+  // }
+
+  // fetchBayans() {
+  //   FIRESTORE.collection("bayans")
+  //     .get()
+  //     .then(snapshot => {
+  //       if (!snapshot.empty) {
+  //         let arr = [];
+  //         snapshot.forEach(doc => {
+  //           var obj = doc.data();
+  //           obj.id = doc.id;
+  //           obj.searchType = "bayans";
+  //           arr.push(obj);
+  //         });
+  //         this.setState({ data: [arr, ...this.state.data] });
+  //       }
+  //     })
+  //     .then(() => {
+  //       this.fetchBooks();
+  //     })
+  //     .then(() => {
+  //       this.fetchEvents();
+  //     })
+  //     .catch(err => {
+  //       console.log(err.message);
+  //     });
+  // }
+
+  // fetchBooks() {
+  //   FIRESTORE.collection("books")
+  //     .get()
+  //     .then(snapshot => {
+  //       if (!snapshot.empty) {
+  //         let arr = [];
+  //         snapshot.forEach(doc => {
+  //           var obj = doc.data();
+  //           obj.id = doc.id;
+  //           obj.searchType = "books";
+  //           arr.push(obj);
+  //         });
+  //         this.setState({ data: [arr, ...this.state.data] });
+  //       }
+  //     });
+  // }
+
+  // fetchEvents() {
+  //   FIRESTORE.collection("events")
+  //     .get()
+  //     .then(snapshot => {
+  //       if (!snapshot.empty) {
+  //         let arr = [];
+  //         snapshot.forEach(doc => {
+  //           var obj = doc.data();
+  //           obj.id = doc.id;
+  //           obj.searchType = "events";
+  //           arr.push(obj);
+  //         });
+  //         this.setState({ data: [arr, ...this.state.data] });
+  //       }
+  //     });
+  // }
 
   searchItems = e => {
     let { data } = this.state;
-    const makeData = data.flat();
     const searchTxt = e.target.value;
-    const result = makeData.filter(item => {
-      const lowerItem = item.title.toString().toLowerCase();
+    const result = data.filter(item => {
+      const lowerItem = item.title
+        ? item.title.toString().toLowerCase()
+        : item.name.toString().toLowerCase();
       const lowerText = searchTxt.toLowerCase();
       return lowerItem.substring(0, lowerText.length).indexOf(lowerText) !== -1;
     });
@@ -167,6 +199,9 @@ class SerachBox extends Component {
     } else if (searchType === "bayans") {
       store.dispatch(bayanDetails(data));
       this.props.history.push("/bayan-details");
+    } else if (searchType === "personalities") {
+      store.dispatch(personalityDetails(data));
+      this.props.history.push("/personality-details");
     } else {
       store.dispatch(eventDetails(data));
       this.props.history.push("/event-details");
@@ -174,7 +209,8 @@ class SerachBox extends Component {
   };
 
   render() {
-    console.clear();
+    // console.clear();
+    // console.log(this.state);
     const { classes } = this.props;
     const { result, searchTxt } = this.state;
     return (
@@ -212,21 +248,22 @@ class SerachBox extends Component {
                 <InputBase
                   className={classes.input}
                   placeholder="Search"
+                  value={searchTxt}
                   onChange={e => this.searchItems(e)}
                 />
                 {searchTxt && (
                   <IconButton
                     className={classes.iconButton}
                     aria-label="clear"
-                    onChange={() => this.setState({ searchTxt: "" })}
+                    onClick={() => this.setState({ searchTxt: "" })}
                   >
                     <ClearIcon />
                   </IconButton>
                 )}
               </div>
-              <List>
-                {searchTxt &&
-                  (result.length > 0 ? (
+              {searchTxt && (
+                <List>
+                  {result.length > 0 ? (
                     result.map((v, i) => {
                       return (
                         <ListItem
@@ -241,17 +278,25 @@ class SerachBox extends Component {
                               <LibraryBooksIcon />
                             ) : v.searchType === "bayans" ? (
                               <HeadsetIcon />
+                            ) : v.searchType === "personalities" ? (
+                              <PersonOutlineIcon />
                             ) : (
                               <EventIcon />
                             )}
                           </ListItemIcon>
                           <ListItemText
-                            primary={v.title}
+                            primary={
+                              v.searchType === "personalities"
+                                ? v.name
+                                : v.title
+                            }
                             secondary={
                               v.searchType === "books"
                                 ? v.author
                                 : v.searchType === "bayans"
                                 ? v.speecherName
+                                : v.searchType === "personalities"
+                                ? "personality"
                                 : v.type + " event"
                             }
                           />
@@ -266,20 +311,24 @@ class SerachBox extends Component {
                         fontSize: 16
                       }}
                     >
-                      No search found for "{searchTxt}"
+                      No search found for " {searchTxt} "
                     </p>
-                  ))}
-                {/* <ListItem
+                  )}
+                  {/* <ListItem
                   button
                   selected={this.state.selectedIndex === 1}
                   onClick={event => this.handleListItemClick(event, 1)}
                 >
                   <ListItemIcon>
-                    <DraftsIcon />
+                    <EventIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Drafts" />
+                  <ListItemText
+                    style={{ justifyContent: "flex-start" }}
+                    primary="Drafts"
+                  />
                 </ListItem> */}
-              </List>
+                </List>
+              )}
             </Grid>
           </Grid>
         </Dialog>

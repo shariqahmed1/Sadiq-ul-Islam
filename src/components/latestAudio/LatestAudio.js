@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FIRESTORE } from "../../constants/firebase/firebase";
+// import { FIRESTORE } from "../../constants/firebase/firebase";
 import { Link } from "react-router-dom";
 import { bayanDetails } from "../../redux/actions/actions";
 import { store } from "../../redux/store/store";
@@ -8,33 +8,46 @@ class LatestAudio extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      latestBayanData: null
+      latestBayan: null
     };
   }
 
   componentDidMount() {
-    this._fetchLatestBayan();
+    // this._fetchLatestBayan();
+    // this.subscribe();
+    this.getStatesFromRedux();
+    store.subscribe(() => this.getStatesFromRedux());
   }
 
-  _fetchLatestBayan = () => {
-    FIRESTORE.collection("bayans")
-      .orderBy("timeStamp", "desc")
-      .limit(1)
-      .onSnapshot(querySnapshot => {
-        if (!querySnapshot.empty) {
-          querySnapshot.forEach(doc => {
-            var obj = doc.data();
-            obj.id = doc.id;
-            this.setState({ latestBayanData: obj });
-          });
-        }
-      });
+  getStatesFromRedux = () => {
+    let { AuthReducer } = store.getState();
+    let latestBayan =
+      AuthReducer &&
+      AuthReducer.bayans &&
+      AuthReducer.bayans.length &&
+      AuthReducer.bayans[AuthReducer.bayans.length - 1];
+    this.setState({ latestBayan });
   };
 
+  // _fetchLatestBayan = () => {
+  //   FIRESTORE.collection("bayans")
+  //     .orderBy("timeStamp", "desc")
+  //     .limit(1)
+  //     .onSnapshot(querySnapshot => {
+  //       if (!querySnapshot.empty) {
+  //         querySnapshot.forEach(doc => {
+  //           var obj = doc.data();
+  //           obj.id = doc.id;
+  //           this.setState({ latestBayan: obj });
+  //         });
+  //       }
+  //     });
+  // };
+
   render() {
-    console.clear();
-    const { latestBayanData } = this.state;
-    return latestBayanData ? (
+    // console.clear();
+    const { latestBayan } = this.state;
+    return latestBayan ? (
       <section id="latest-audio" className="half-section parallaxie">
         <div className="container-fluid">
           <div className="row">
@@ -48,17 +61,17 @@ class LatestAudio extends Component {
                     className="darkcolor bottom20 wow fadeIn"
                     data-wow-delay="350ms"
                   >
-                    {latestBayanData.title}
+                    {latestBayan.title}
                   </h4>
-                  {latestBayanData !== null && (
+                  {latestBayan !== null && (
                     <p
                       className="heading_space wow fadeIn"
                       data-wow-delay="400ms"
                       dangerouslySetInnerHTML={{
-                        __html: latestBayanData.description
-                          ? latestBayanData.description.length > 500
-                            ? `${latestBayanData.description.substr(0, 500)}...`
-                            : latestBayanData.description
+                        __html: latestBayan.description
+                          ? latestBayan.description.length > 500
+                            ? `${latestBayan.description.substr(0, 500)}...`
+                            : latestBayan.description
                           : "One who proceeds on a path in the pursuit of knowledge, God makes him proceed therewith on a path to the Garden (Paradise). And, verily, the angels spread their wings for the seekers of knowledge out of delight. Verily, every creature of the heaven and the earth asks forgiveness for the seeker of knowledge, even the fish in the sea. The merit of the ‘alim (the learned) over the ‘abid (the devout) is like the merit of the moon over the stars on a full-moon night. The learned are the heirs of the prophets, for the prophets did not leave behind a legacy of wealth but that of knowledge. So whoever partakes of it derives a plenteous benefit"
                       }}
                     />
@@ -71,7 +84,7 @@ class LatestAudio extends Component {
                     className="button btnprimary pagescroll wow fadeInUp"
                     data-wow-delay="450ms"
                     onClick={() => {
-                      store.dispatch(bayanDetails(latestBayanData));
+                      store.dispatch(bayanDetails(latestBayan));
                     }}
                   >
                     see more
@@ -87,7 +100,7 @@ class LatestAudio extends Component {
                   scrolling="no"
                   frameBorder="no"
                   allow="autoplay"
-                  src={latestBayanData.embed}
+                  src={latestBayan.embed}
                 />
               </div>
             </div>

@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import { store } from "../../redux/store/store";
 import "../404/style.css";
 import { FIRESTORE } from "../../constants/firebase/firebase";
-// import _ from "lodash";
 import { bayanDetails } from "../../redux/actions/actions";
 
 class Speecher extends Component {
@@ -34,7 +33,6 @@ class Speecher extends Component {
           speecherName: state.speecherName
         });
         this.fetchBayans(state.speecherName);
-        // this.fetchLimits(state.speecherName);
       } else {
         this.props.history.push("/");
       }

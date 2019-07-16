@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FIRESTORE } from "../../constants/firebase/firebase";
+// import { FIRESTORE } from "../../constants/firebase/firebase";
 import { withRouter } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { bookDetails } from "../../redux/actions/actions";
@@ -9,33 +9,45 @@ class LatestBook extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      latestBookData: null
+      latestBook: null
     };
   }
 
   componentDidMount() {
-    this._fetchLatestBooks();
+    // this._fetchLatestBooks();
+    this.getStatesFromRedux();
+    store.subscribe(() => this.getStatesFromRedux());
   }
 
-  _fetchLatestBooks = () => {
-    FIRESTORE.collection("books")
-      .orderBy("timeStamp", "desc")
-      .limit(1)
-      .onSnapshot(querySnapshot => {
-        if (!querySnapshot.empty) {
-          querySnapshot.forEach(doc => {
-            var obj = doc.data();
-            obj.id = doc.id;
-            this.setState({ latestBookData: obj });
-          });
-        }
-      });
+  getStatesFromRedux = () => {
+    let { AuthReducer } = store.getState();
+    let latestBook =
+      AuthReducer &&
+      AuthReducer.books &&
+      AuthReducer.books.length &&
+      AuthReducer.books[AuthReducer.books.length - 1];
+    this.setState({ latestBook });
   };
 
+  // _fetchLatestBooks = () => {
+  //   FIRESTORE.collection("books")
+  //     .orderBy("timeStamp", "desc")
+  //     .limit(1)
+  //     .onSnapshot(querySnapshot => {
+  //       if (!querySnapshot.empty) {
+  //         querySnapshot.forEach(doc => {
+  //           var obj = doc.data();
+  //           obj.id = doc.id;
+  //           this.setState({ latestBook: obj });
+  //         });
+  //       }
+  //     });
+  // };
+
   render() {
-    console.clear();
-    const { latestBookData } = this.state;
-    return latestBookData ? (
+    // console.clear();
+    const { latestBook } = this.state;
+    return latestBook ? (
       <section id="latest-book" className="half-section parallaxie">
         <div className="container-fluid">
           <div className="row">
@@ -43,7 +55,7 @@ class LatestBook extends Component {
               <div className="image hover-effect img-container">
                 <img
                   alt="not found"
-                  src={latestBookData.url}
+                  src={latestBook.url}
                   className="latest-book-height"
                 />
               </div>
@@ -58,16 +70,16 @@ class LatestBook extends Component {
                     className="darkcolor bottom20 wow fadeIn"
                     data-wow-delay="350ms"
                   >
-                    {latestBookData.title}
+                    {latestBook.title}
                   </h4>
                   <p
                     className="heading_space wow fadeIn"
                     data-wow-delay="400ms"
                     dangerouslySetInnerHTML={{
                       __html:
-                        latestBookData.description.length > 500
-                          ? `${latestBookData.description.substr(0, 500)}...`
-                          : latestBookData.description
+                        latestBook.description.length > 500
+                          ? `${latestBook.description.substr(0, 500)}...`
+                          : latestBook.description
                     }}
                   />
                   <Link
@@ -77,7 +89,7 @@ class LatestBook extends Component {
                     className="button btnsecondary pagescroll wow fadeInUp"
                     data-wow-delay="450ms"
                     onClick={() => {
-                      store.dispatch(bookDetails(latestBookData));
+                      store.dispatch(bookDetails(latestBook));
                     }}
                   >
                     See More

@@ -3,15 +3,6 @@ const reducer = (state = {}, action) => {
     case "IS_LOGIN": {
       return { ...state, isLogin: action.isLogin };
     }
-    case "GET_SPEECHERS": {
-      return { ...state, speechers: action.speechers };
-    }
-    case "GET_AUTHORS": {
-      return { ...state, authors: action.authors };
-    }
-    case "GET_PERSONALITIES": {
-      return { ...state, personalities: action.personalities };
-    }
     case "LOADER": {
       return { ...state, loader: action.loader };
     }
@@ -41,6 +32,15 @@ const reducer = (state = {}, action) => {
     }
     case "EVENTS": {
       return { ...state, events: action.events };
+    }
+    case "SPEECHERS": {
+      return { ...state, speechers: action.speechers };
+    }
+    case "AUTHORS": {
+      return { ...state, authors: action.authors };
+    }
+    case "PERSONALITIES": {
+      return { ...state, personalities: action.personalities };
     }
     default: {
       return state;

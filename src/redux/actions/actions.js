@@ -9,13 +9,6 @@
 //     });
 // };
 
-export const speechers = speechers => {
-  return {
-    type: "GET_SPEECHERS",
-    speechers
-  };
-};
-
 export const loader = loader => {
   return {
     type: "LOADER",
@@ -23,16 +16,67 @@ export const loader = loader => {
   };
 };
 
+export const speecher = speecherName => {
+  return {
+    type: "GET_SPEECHER",
+    speecherName
+  };
+};
+
+export const author = authorName => {
+  return {
+    type: "GET_AUTHOR",
+    authorName
+  };
+};
+
+export const isLogin = flag => {
+  return {
+    type: "IS_LOGIN",
+    isLogin: flag
+  };
+};
+
+// know to use
+
+export const bayans = bayans => {
+  return {
+    type: "BAYANS",
+    bayans
+  };
+};
+
+export const books = books => {
+  return {
+    type: "BOOKS",
+    books
+  };
+};
+
+export const events = events => {
+  return {
+    type: "EVENTS",
+    events
+  };
+};
+
+export const speechers = speechers => {
+  return {
+    type: "SPEECHERS",
+    speechers
+  };
+};
+
 export const authors = authors => {
   return {
-    type: "GET_AUTHORS",
+    type: "AUTHORS",
     authors
   };
 };
 
 export const personalities = personalities => {
   return {
-    type: "GET_PERSONALITIES",
+    type: "PERSONALITIES",
     personalities
   };
 };
@@ -62,47 +106,5 @@ export const eventDetails = eventDetails => {
   return {
     type: "GET_EVENT_DETAILS",
     eventDetails
-  };
-};
-
-export const speecher = speecherName => {
-  return {
-    type: "GET_SPEECHER",
-    speecherName
-  };
-};
-
-export const author = authorName => {
-  return {
-    type: "GET_AUTHOR",
-    authorName
-  };
-};
-
-export const isLogin = flag => {
-  return {
-    type: "IS_LOGIN",
-    isLogin: flag
-  };
-};
-
-export const bayans = bayans => {
-  return {
-    type: "BAYANS",
-    bayans
-  };
-};
-
-export const books = books => {
-  return {
-    type: "BOOKS",
-    books
-  };
-};
-
-export const events = events => {
-  return {
-    type: "EVENTS",
-    events
   };
 };
