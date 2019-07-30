@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import "font-awesome/css/font-awesome.min.css";
 import SearchBox from "../searchBox/SearchBox";
-// import { FIRESTORE } from "../../constants/firebase/firebase";
 import { Link, withRouter } from "react-router-dom";
 import { store } from "../../redux/store/store";
 import {
@@ -10,6 +9,7 @@ import {
   personalityDetails
 } from "../../redux/actions/actions";
 import SnackBar from "../snackBar/SnackBar";
+import AnchorLink from "react-anchor-link-smooth-scroll";
 
 class Header extends Component {
   constructor(props) {
@@ -27,9 +27,6 @@ class Header extends Component {
   }
 
   componentDidMount() {
-    // this.fetchingSpeechers();
-    // this.fetchingAuthors();
-    // this.fetchingPersonalities();
     this.getStatesFromRedux();
     store.subscribe(() => this.getStatesFromRedux());
   }
@@ -56,7 +53,6 @@ class Header extends Component {
       authors,
       personalities
     });
-    // console.log(store.getState().AuthReducer);
   };
 
   handleCloseSnackBar = () => {
@@ -73,53 +69,6 @@ class Header extends Component {
     });
   }
 
-  // fetchingSpeechers = () => {
-  //   let { speechers } = this.state;
-  //   FIRESTORE.collection("speechers")
-  //     .orderBy("timeStamp", "asc")
-  //     .onSnapshot(snap => {
-  //       speechers = [];
-  //       snap.forEach(doc => {
-  //         var obj = {};
-  //         obj.id = doc.id;
-  //         obj.name = doc.data().name;
-  //         speechers.push(obj);
-  //       });
-  //       this.setState({ speechers });
-  //     });
-  // };
-
-  // fetchingAuthors = () => {
-  //   let { authors } = this.state;
-  //   FIRESTORE.collection("authors")
-  //     .orderBy("timeStamp", "asc")
-  //     .onSnapshot(snap => {
-  //       authors = [];
-  //       snap.forEach(doc => {
-  //         var obj = {};
-  //         obj.id = doc.id;
-  //         obj.name = doc.data().name;
-  //         authors.push(obj);
-  //       });
-  //       this.setState({ authors });
-  //     });
-  // };
-
-  // fetchingPersonalities = () => {
-  //   let { personalities } = this.state;
-  //   FIRESTORE.collection("personalities")
-  //     .orderBy("timeStamp", "asc")
-  //     .onSnapshot(snap => {
-  //       personalities = [];
-  //       snap.forEach(doc => {
-  //         var obj = doc.data();
-  //         obj.id = doc.id;
-  //         personalities.push(obj);
-  //       });
-  //       this.setState({ personalities });
-  //     });
-  // };
-
   handleClose(open) {
     this.setState({
       isShow: open
@@ -127,7 +76,6 @@ class Header extends Component {
   }
 
   render() {
-    // console.clear();
     const { isShow, speechers, authors, personalities } = this.state;
 
     return (
@@ -143,14 +91,12 @@ class Header extends Component {
                 <img
                   src={require("../../images/logo-default.png")}
                   alt="logo"
-                  style={{ width: "150px", height: "30px" }}
                   className="logo-default"
                 />
                 <img
                   src={require("../../images/logo-dark.png")}
                   alt="logo"
                   className="logo-scrolled"
-                  style={{ width: "150px", height: "30px" }}
                 />
               </a>
               <button
@@ -318,12 +264,6 @@ class Header extends Component {
                       className="dropdown-menu zoom-in"
                       aria-labelledby="navbarDropdown3"
                     >
-                      {/* <Link className="dropdown-item" to="/#latest-book">
-                        ABOUT US
-                      </Link>
-                      {personalities.length > 0 && (
-                        <div className="dropdown-divider" />
-                      )} */}
                       {personalities.length > 0
                         ? personalities.map((val, index) => {
                             return (
@@ -350,9 +290,6 @@ class Header extends Component {
                       CONTACT US
                     </Link>
                   </li>
-                  {/* <li className="nav-item">
-                    <a className="nav-link pagescroll" href="#our-testimonial">LOGIN</a>
-                  </li> */}
                   <li className="nav-item">
                     <a
                       className="nav-link pagescroll"

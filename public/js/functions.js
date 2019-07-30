@@ -146,15 +146,15 @@ jQuery(function($) {
   }
 
   /* ------- Smooth scroll ------- */
-  $("a.pagescroll").on("click", function(event) {
-    event.preventDefault();
-    $("html,body").animate(
-      {
-        scrollTop: $(this.hash).offset().top
-      },
-      1200
-    );
-  });
+  // $("a.pagescroll").on("click", function(event) {
+  //   event.preventDefault();
+  //   $("html,body").animate(
+  //     {
+  //       scrollTop: $(this.hash).offset().top
+  //     },
+  //     1200
+  //   );
+  // });
   /*hide menu on mobile click*/
   $(".navbar-nav>li>a").on("click", function() {
     $(".navbar-collapse").collapse("hide");

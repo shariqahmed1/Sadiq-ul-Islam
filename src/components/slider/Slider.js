@@ -16,9 +16,8 @@ class App extends Component {
     FIRESTORE.collection("slider").onSnapshot(snapshot => {
       sliders = [];
       snapshot.forEach(doc => {
-        var obj = {};
-        obj.key = doc.id;
-        obj.data = doc.data();
+        var obj = doc.data();
+        obj.id = doc.id;
         sliders.push(obj);
       });
       this.setState({ sliders, isLoading: false });
@@ -26,16 +25,15 @@ class App extends Component {
   }
 
   render() {
-    // console.clear();
     const { sliders, isLoading } = this.state;
     return (
       <div
         id="carouselExampleIndicators"
-        className="carousel slide"
+        className="carousel"
         data-ride="carousel"
       >
         <ol className="carousel-indicators">
-          {!isLoading ? (
+          {sliders ? (
             sliders.length > 0 ? (
               sliders.map((val, index) => {
                 return (
@@ -67,29 +65,27 @@ class App extends Component {
             sliders.length > 0 ? (
               sliders.map((val, index) => {
                 return (
-                  <div class={`carousel-item ${index === 0 ? "active" : ""}`}>
+                  <div
+                    key={index}
+                    className={`carousel-item ${index === 0 ? "active" : ""}`}
+                  >
                     <div className="sliderImg">
                       <img
-                        className="d-block sliderImage"
-                        src={val.data.url}
+                        className="d-block w-100"
+                        src={val.url}
                         alt="First slide"
+                        style={{
+                          backgroundSize: "cover",
+                          maxHeight: "100vh"
+                        }}
                       />
                     </div>
-                    {val.data.caption && (
-                      <div
-                        className="carousel-caption d-flex"
-                        style={{
-                          alignItems: "center",
-                          top: 0,
-                          bottom: 0,
-                          paddingTop: 0,
-                          paddingBottom: 0
-                        }}
-                      >
+                    {val.caption && (
+                      <div className="carousel-caption">
                         <p
                           className="sliderCaption"
                           dangerouslySetInnerHTML={{
-                            __html: val.data.caption
+                            __html: val.caption
                           }}
                         />
                       </div>
@@ -100,11 +96,10 @@ class App extends Component {
             ) : (
               <div className="carousel-item active">
                 <img
-                  className="d-block"
+                  className="d-block  w-100"
                   style={{
-                    width: "100%",
-                    height: "100vh",
-                    backgroundSize: "cover"
+                    backgroundSize: "cover",
+                    maxHeight: "100vh"
                   }}
                   src={require("../../images/sliderStatus.jpg")}
                   alt="First slide"
@@ -113,48 +108,36 @@ class App extends Component {
             )
           ) : (
             <div className="carousel-item active">
-              <div
+              <img
+                className="d-block  w-100"
                 style={{
-                  width: "100%",
-                  height: "100vh",
-                  backgoundColor: "#000",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center"
+                  backgroundSize: "cover",
+                  maxHeight: "100vh"
                 }}
-              >
-                <img
-                  className="d-block"
-                  style={{
-                    width: 200,
-                    height: 200,
-                    backgroundSize: "cover"
-                  }}
-                  src={require("../../images/madarsa.gif")}
-                  alt="First slide"
-                />
-              </div>
+                src={require("../../images/sliderStatus.jpg")}
+                alt="First slide"
+              />
             </div>
           )}
         </div>
-        {/* <a
-            class="carousel-control-prev d-sm-none  d-md-flex"
-            href="#carouselExampleIndicators"
-            role="button"
-            data-slide="prev"
-          >
-            <span class="carousel-control-prev-icon" aria-hidden="true" />
-            <span class="sr-only">Previous</span>
-          </a>
-          <a
-            class="carousel-control-next d-sm-none d-md-flex"
-            href="#carouselExampleIndicators"
-            role="button"
-            data-slide="next"
-          >
-            <span class="carousel-control-next-icon" aria-hidden="true" />
-            <span class="sr-only">Next</span>
-          </a> */}
+        <a
+          className="carousel-control-prev d-sm-none  d-md-flex"
+          href="#carouselExampleIndicators"
+          role="button"
+          data-slide="prev"
+        >
+          <span className="carousel-control-prev-icon" aria-hidden="true" />
+          <span className="sr-only">Previous</span>
+        </a>
+        <a
+          className="carousel-control-next d-sm-none d-md-flex"
+          href="#carouselExampleIndicators"
+          role="button"
+          data-slide="next"
+        >
+          <span className="carousel-control-next-icon" aria-hidden="true" />
+          <span className="sr-only">Next</span>
+        </a>
       </div>
     );
   }

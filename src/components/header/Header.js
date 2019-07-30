@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import "font-awesome/css/font-awesome.min.css";
-import AnchorLink from "react-anchor-link-smooth-scroll";
 import SearchBox from "../searchBox/SearchBox";
-// import { FIRESTORE } from "../../constants/firebase/firebase";
 import { Link, withRouter } from "react-router-dom";
 import { store } from "../../redux/store/store";
 import {
@@ -10,6 +8,7 @@ import {
   author,
   personalityDetails
 } from "../../redux/actions/actions";
+import AnchorLink from "react-anchor-link-smooth-scroll";
 
 class Header extends Component {
   constructor(props) {
@@ -24,9 +23,6 @@ class Header extends Component {
   }
 
   componentDidMount() {
-    // this.fetchingSpeechers();
-    // this.fetchingAuthors();
-    // this.fetchingPersonalities();
     this.getStatesFromRedux();
     store.subscribe(() => this.getStatesFromRedux());
   }
@@ -53,55 +49,7 @@ class Header extends Component {
       authors,
       personalities
     });
-    // console.log(store.getState().AuthReducer);
   };
-
-  // fetchingSpeechers = () => {
-  //   let { speechers } = this.state;
-  //   FIRESTORE.collection("speechers")
-  //     .orderBy("timeStamp", "asc")
-  //     .onSnapshot(snap => {
-  //       speechers = [];
-  //       snap.forEach(doc => {
-  //         var obj = {};
-  //         obj.id = doc.id;
-  //         obj.name = doc.data().name;
-  //         speechers.push(obj);
-  //       });
-  //       this.setState({ speechers });
-  //     });
-  // };
-
-  // fetchingAuthors = () => {
-  //   let { authors } = this.state;
-  //   FIRESTORE.collection("authors")
-  //     .orderBy("timeStamp", "asc")
-  //     .onSnapshot(snap => {
-  //       authors = [];
-  //       snap.forEach(doc => {
-  //         var obj = {};
-  //         obj.id = doc.id;
-  //         obj.name = doc.data().name;
-  //         authors.push(obj);
-  //       });
-  //       this.setState({ authors });
-  //     });
-  // };
-
-  // fetchingPersonalities = () => {
-  //   let { personalities } = this.state;
-  //   FIRESTORE.collection("personalities")
-  //     .orderBy("timeStamp", "asc")
-  //     .onSnapshot(snap => {
-  //       personalities = [];
-  //       snap.forEach(doc => {
-  //         var obj = doc.data();
-  //         obj.id = doc.id;
-  //         personalities.push(obj);
-  //       });
-  //       this.setState({ personalities });
-  //     });
-  // };
 
   handleClose(open) {
     this.setState({
@@ -111,7 +59,6 @@ class Header extends Component {
 
   render() {
     const { isShow, speechers, authors, personalities } = this.state;
-    // console.clear();
     return (
       <div id="top">
         <header className="site-header">
@@ -121,14 +68,12 @@ class Header extends Component {
                 <img
                   src={require("../../images/1.png")}
                   alt="logo"
-                  // style={{ width: "150px", height: "30px" }}
                   className="logo-default"
                 />
                 <img
                   src={require("../../images/2.png")}
                   alt="logo"
                   className="logo-scrolled"
-                  // style={{ width: "150px", height: "30px" }}
                 />
               </a>
               <button
@@ -144,7 +89,7 @@ class Header extends Component {
               <div className="collapse navbar-collapse" id="xenav">
                 <ul className="navbar-nav" id="container">
                   <li className="nav-item">
-                    <AnchorLink offset="70" className="nav-link" href="#top">
+                    <AnchorLink className="nav-link" href="#top">
                       HOME
                     </AnchorLink>
                   </li>
@@ -168,7 +113,6 @@ class Header extends Component {
                       aria-labelledby="navbarDropdown"
                     >
                       <AnchorLink
-                        offset="70"
                         className="dropdown-item"
                         href="#latest-audio"
                       >
@@ -195,11 +139,7 @@ class Header extends Component {
                           })
                         : ""}
                       <div className="dropdown-divider" />
-                      <Link
-                        to="/bayans"
-                        className="dropdown-item"
-                        href="#latest-book"
-                      >
+                      <Link to="/bayans" className="dropdown-item">
                         All Bayans
                       </Link>
                     </div>
@@ -223,11 +163,7 @@ class Header extends Component {
                       className="dropdown-menu zoom-in"
                       aria-labelledby="navbarDropdown2"
                     >
-                      <AnchorLink
-                        offset="70"
-                        className="dropdown-item"
-                        href="#latest-book"
-                      >
+                      <AnchorLink className="dropdown-item" href="#latest-book">
                         Latest
                       </AnchorLink>
                       {authors.length > 0 && (
@@ -251,11 +187,7 @@ class Header extends Component {
                           })
                         : ""}
                       <div className="dropdown-divider" />
-                      <Link
-                        to="/books"
-                        className="dropdown-item"
-                        href="#latest-book"
-                      >
+                      <Link to="/books" className="dropdown-item">
                         All Books
                       </Link>
                     </div>
@@ -303,16 +235,6 @@ class Header extends Component {
                       className="dropdown-menu zoom-in"
                       aria-labelledby="navbarDropdown3"
                     >
-                      {/* <AnchorLink
-                        offset="70"
-                        className="dropdown-item"
-                        href="#latest-book"
-                      >
-                        ABOUT US
-                      </AnchorLink>
-                      {personalities.length > 0 && (
-                        <div className="dropdown-divider" />
-                      )} */}
                       {personalities.length > 0
                         ? personalities.map((val, index) => {
                             return (
@@ -342,9 +264,6 @@ class Header extends Component {
                       CONTACT US
                     </AnchorLink>
                   </li>
-                  {/* <li className="nav-item">
-                    <a className="nav-link pagescroll" href="#our-testimonial">LOGIN</a>
-                  </li> */}
                   <li className="nav-item">
                     <a
                       className="nav-link pagescroll"

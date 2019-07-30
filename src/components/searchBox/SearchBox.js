@@ -19,9 +19,7 @@ import LibraryBooksIcon from "@material-ui/icons/LibraryBooks";
 import HeadsetIcon from "@material-ui/icons/Headset";
 import EventIcon from "@material-ui/icons/Event";
 import ClearIcon from "@material-ui/icons/Clear";
-// import { FIRESTORE } from "../../constants/firebase/firebase";
 import { withRouter } from "react-router-dom";
-// import { Link } from "react-router-dom";
 import {
   bookDetails,
   bayanDetails,
@@ -82,7 +80,6 @@ class SerachBox extends Component {
   }
 
   componentDidMount() {
-    // this.fetchData();
     this.getStatesFromRedux();
     store.subscribe(() => this.getStatesFromRedux());
   }
@@ -112,72 +109,7 @@ class SerachBox extends Component {
     this.setState({
       data: [...bayans, ...books, ...events, ...personalities]
     });
-    // console.log(store.getState().AuthReducer);
   };
-
-  // fetchData() {
-  //   this.fetchBayans();
-  // }
-
-  // fetchBayans() {
-  //   FIRESTORE.collection("bayans")
-  //     .get()
-  //     .then(snapshot => {
-  //       if (!snapshot.empty) {
-  //         let arr = [];
-  //         snapshot.forEach(doc => {
-  //           var obj = doc.data();
-  //           obj.id = doc.id;
-  //           obj.searchType = "bayans";
-  //           arr.push(obj);
-  //         });
-  //         this.setState({ data: [arr, ...this.state.data] });
-  //       }
-  //     })
-  //     .then(() => {
-  //       this.fetchBooks();
-  //     })
-  //     .then(() => {
-  //       this.fetchEvents();
-  //     })
-  //     .catch(err => {
-  //       console.log(err.message);
-  //     });
-  // }
-
-  // fetchBooks() {
-  //   FIRESTORE.collection("books")
-  //     .get()
-  //     .then(snapshot => {
-  //       if (!snapshot.empty) {
-  //         let arr = [];
-  //         snapshot.forEach(doc => {
-  //           var obj = doc.data();
-  //           obj.id = doc.id;
-  //           obj.searchType = "books";
-  //           arr.push(obj);
-  //         });
-  //         this.setState({ data: [arr, ...this.state.data] });
-  //       }
-  //     });
-  // }
-
-  // fetchEvents() {
-  //   FIRESTORE.collection("events")
-  //     .get()
-  //     .then(snapshot => {
-  //       if (!snapshot.empty) {
-  //         let arr = [];
-  //         snapshot.forEach(doc => {
-  //           var obj = doc.data();
-  //           obj.id = doc.id;
-  //           obj.searchType = "events";
-  //           arr.push(obj);
-  //         });
-  //         this.setState({ data: [arr, ...this.state.data] });
-  //       }
-  //     });
-  // }
 
   searchItems = e => {
     let { data } = this.state;
@@ -186,8 +118,8 @@ class SerachBox extends Component {
       const lowerItem = item.title
         ? item.title.toString().toLowerCase()
         : item.name.toString().toLowerCase();
-      const lowerText = searchTxt.toLowerCase();
-      return lowerItem.substring(0, lowerText.length).indexOf(lowerText) !== -1;
+      const lowerText = searchTxt.toLowerCase().trim();
+      return lowerItem.indexOf(lowerText) !== -1;
     });
     this.setState({ result, searchTxt });
   };
@@ -209,8 +141,6 @@ class SerachBox extends Component {
   };
 
   render() {
-    // console.clear();
-    // console.log(this.state);
     const { classes } = this.props;
     const { result, searchTxt } = this.state;
     return (
@@ -314,19 +244,6 @@ class SerachBox extends Component {
                       No search found for " {searchTxt} "
                     </p>
                   )}
-                  {/* <ListItem
-                  button
-                  selected={this.state.selectedIndex === 1}
-                  onClick={event => this.handleListItemClick(event, 1)}
-                >
-                  <ListItemIcon>
-                    <EventIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    style={{ justifyContent: "flex-start" }}
-                    primary="Drafts"
-                  />
-                </ListItem> */}
                 </List>
               )}
             </Grid>

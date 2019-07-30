@@ -15,7 +15,6 @@ class Events extends Component {
   }
 
   componentDidMount() {
-    // this.fetchEvents();
     this.getStatesFromRedux();
     store.subscribe(() => this.getStatesFromRedux());
   }
@@ -28,30 +27,9 @@ class Events extends Component {
         : []
       : [];
     this.setState({ events });
-    // console.log(events);
   };
 
-  // fetchEvents() {
-  //   let { events } = this.state;
-  //   FIRESTORE.collection("events")
-  //     .where("isShowOnMainPage", "==", true)
-  //     .onSnapshot(snapshot => {
-  //       events = [];
-  //       if (!snapshot.empty) {
-  //         snapshot.forEach(doc => {
-  //           var obj = doc.data();
-  //           obj.id = doc.id;
-  //           events.push(obj);
-  //         });
-  //         this.setState({
-  //           events
-  //         });
-  //       }
-  //     });
-  // }
-
   render() {
-    // console.clear();
     const { events } = this.state;
     const filterData = _.filter(events, { isShowOnMainPage: true });
     return (

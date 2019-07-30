@@ -22,7 +22,7 @@ class Routes extends Component {
   };
 
   render() {
-    console.clear();
+    // console.clear();
     return (
       <Router history={history}>
         <Switch>
