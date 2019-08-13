@@ -5,7 +5,6 @@ import "firebase/database"; // for realtime database
 import "firebase/firestore"; // for cloud firestore
 import "firebase/messaging"; // for cloud messaging
 import "firebase/functions"; // for cloud functions
-// import "firebase/";
 
 const config = {
   apiKey: "AIzaSyCX52d_eJ42PEl0jXdfj_GqHa3fi8URvOc",
@@ -18,8 +17,9 @@ const config = {
 firebase.initializeApp(config);
 
 const FIRESTORE = firebase.firestore();
+const FIREBASE = firebase;
 // FIRESTORE.settings({
 //     timestampsInSnapshots: true
 // });
 
-export { FIRESTORE };
+export { FIRESTORE, FIREBASE };

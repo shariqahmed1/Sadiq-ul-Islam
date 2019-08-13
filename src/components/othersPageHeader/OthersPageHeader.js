@@ -9,7 +9,6 @@ import {
   personalityDetails
 } from "../../redux/actions/actions";
 import SnackBar from "../snackBar/SnackBar";
-import AnchorLink from "react-anchor-link-smooth-scroll";
 
 class Header extends Component {
   constructor(props) {
@@ -83,18 +82,14 @@ class Header extends Component {
         <header className="site-header">
           <nav className="navbar navbar-expand-xl center-brand static-nav">
             <div className="container">
-              <a
-                className="navbar-brand"
-                href="false"
-                onClick={() => this.props.history.push("/")}
-              >
+              <a className="navbar-brand" href="/">
                 <img
-                  src={require("../../images/logo-default.png")}
+                  src={require("../../images/1.png")}
                   alt="logo"
                   className="logo-default"
                 />
                 <img
-                  src={require("../../images/logo-dark.png")}
+                  src={require("../../images/2.png")}
                   alt="logo"
                   className="logo-scrolled"
                 />

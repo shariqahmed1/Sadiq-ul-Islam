@@ -9,6 +9,33 @@ import "../404/style.css";
 import _ from "lodash";
 import { bookDetails } from "../../redux/actions/actions";
 
+const styles = {
+  wrapper: {
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center"
+  },
+  cbpItem: {
+    width: 350,
+    left: 0,
+    top: 0
+  },
+  cbpItemH5: {
+    fontSize: 16,
+    fontWeight: 400,
+    marginTop: 10
+  },
+  btnWrapper: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center"
+  },
+  image: {
+    width: "100%",
+    height: "100%"
+  }
+};
+
 class Bayans extends Component {
   constructor(props) {
     super(props);
@@ -138,56 +165,45 @@ class Bayans extends Component {
                   })
                 : sliceArr.map((v, i) => {
                     return (
-                      <div
-                        key={i}
-                        class="cbp-item"
-                        style={{
-                          width: 350,
-                          left: 0,
-                          top: 0
-                        }}
-                      >
-                        <div class="cbp-item-wrapper">
-                          <div class="news_item shadow">
-                            <a class="image" href="javascript:void(0)">
+                      <div className="cbp-item" key={i} style={styles.cbpItem}>
+                        <div className="cbp-item-wrapper">
+                          <div className="news_item shadow">
+                            <div className="img-responsive books">
                               <img
-                                src={v.url}
-                                alt="Latest News"
-                                class="img-responsive bayans"
+                                src={v.bookImage}
+                                alt="Not found!"
+                                style={styles.image}
                               />
-                            </a>
-                            <div class="news_desc">
-                              <h3 class="text-capitalize font-light darkcolor">
+                            </div>
+                            <div className="news_desc">
+                              <h5 style={styles.cbpItemH5}>{v.authorName}</h5>
+                              <h3 className="text-capitalize font-light darkcolor">
                                 <a href="javascript:void(0)">{v.title}</a>
                               </h3>
-                              <h5
-                                style={{
-                                  fontSize: 16,
-                                  fontWeight: 400,
-                                  marginTop: 10
-                                }}
-                              >
-                                {v.author}
-                              </h5>
-                              <p
-                                class="top20 bottom35"
-                                dangerouslySetInnerHTML={{
-                                  __html: v.description
-                                    ? v.description.length > 160
-                                      ? `${v.description.substr(0, 160)}...`
-                                      : v.description
-                                    : "Bayan Desc Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-                                }}
-                              />
-                              <Link
-                                to="/book-details"
-                                class="button btnprimary btn-gradient-hvr"
-                                onClick={() => {
-                                  store.dispatch(bookDetails(v));
-                                }}
-                              >
-                                Read more
-                              </Link>
+                              <div style={styles.btnWrapper}>
+                                <a
+                                  href={v.pdf}
+                                  className="button btnsecondary btn-gradient-hvr"
+                                >
+                                  <i className="fa fa-book" />
+                                </a>
+                                <Link
+                                  to="/book-details"
+                                  className="button btnprimary btn-gradient-hvr"
+                                  onClick={() => {
+                                    store.dispatch(bookDetails(v));
+                                  }}
+                                >
+                                  Read More
+                                </Link>
+                                <a
+                                  href={v.pdf}
+                                  download={v.pdf}
+                                  className="button btnsecondary btn-gradient-hvr"
+                                >
+                                  <i className="fa fa-download" />
+                                </a>
+                              </div>
                             </div>
                           </div>
                         </div>

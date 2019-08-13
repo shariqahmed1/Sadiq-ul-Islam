@@ -66,11 +66,11 @@ class Home extends Component {
         {/* <!--Latest Book--> */}
         <LatestBook />
 
-        {/* <!--Programs--> */}
-        <Events />
-
         {/* <!--Counters--> */}
         <Counters />
+
+        {/* <!--Programs--> */}
+        <Events />
 
         {/* <!--Contact--> */}
         <Contact handleSnackBar={this.handleSnackBar} />

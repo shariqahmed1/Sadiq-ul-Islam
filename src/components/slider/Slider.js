@@ -126,8 +126,18 @@ class App extends Component {
           role="button"
           data-slide="prev"
         >
-          <span className="carousel-control-prev-icon" aria-hidden="true" />
-          <span className="sr-only">Previous</span>
+          <div className="sliderButtons">
+            <span className="" aria-hidden="true">
+              {/* {"<"} */}
+              <img
+                src="https://image.flaticon.com/icons/svg/271/271220.svg"
+                alt="Not found!"
+                style={{ height: 15, width: 15, marginRight: 2 }}
+              />
+            </span>
+            {/* <span className="carousel-control-prev-icon" aria-hidden="true" /> */}
+            <span className="sr-only">Previous</span>
+          </div>
         </a>
         <a
           className="carousel-control-next d-sm-none d-md-flex"
@@ -135,8 +145,17 @@ class App extends Component {
           role="button"
           data-slide="next"
         >
-          <span className="carousel-control-next-icon" aria-hidden="true" />
-          <span className="sr-only">Next</span>
+          <div className="sliderButtons">
+            <span className="" aria-hidden="true">
+              <img
+                src="https://image.flaticon.com/icons/svg/32/32213.svg"
+                alt="Not found!"
+                style={{ height: 15, width: 15, marginLeft: 2 }}
+              />
+            </span>
+            {/* <span className="carousel-control-next-icon" aria-hidden="true" /> */}
+            <span className="sr-only">Next</span>
+          </div>
         </a>
       </div>
     );

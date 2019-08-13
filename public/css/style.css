@@ -506,7 +506,7 @@ ul.social-icons.white li a:focus{
    position: relative;
    display: inline-block;
    font-size: 13px;
-   padding: 1rem 1.8rem;
+   padding: 1rem 1.6rem;
    line-height: 1;
    text-transform: uppercase;
    text-align: center;
@@ -620,6 +620,34 @@ ul.social-icons.white li a:focus{
 .rev_slider .btnprimary-alt:hover, .rev_slider .btnprimary-alt:focus{
    color: #fff;
 }
+
+.sliderButtons{
+   height: 50px;
+   background: white;
+   opacity: 0.9;
+   box-shadow:2px 4px 8px 0px rgba(46, 61, 73, 0.2);
+   overflow: hidden;
+   width: 50px;
+   text-align: center;
+   color: black;
+   line-height: 50px;
+   border-radius: 100px;
+}
+
+.sliderButtons:hover{
+   box-shadow:0 0 8px 0 rgba(17, 22, 26, 0.16), 0 4px 8px 0 rgba(17, 22, 26, 0.08), 0 8px 16px 0 rgba(17, 22, 26, 0.08);
+}
+
+.carousel-control-next, .carousel-control-prev{
+   opacity:1 !important;
+}
+
+
+/* .carousel-control-next, .carousel-control-prev{
+   opacity:1 !important;
+} */
+
+
 
 
 /* transitions common*/
@@ -3090,7 +3118,7 @@ iframe  {
    font-weight: normal;
 }
 .video-parallax h2{
-   font-size: 3.125rem;
+   font-size: 2.8rem;
 }
 .video-parallax .heading-title > span {
 	font-weight: 300;
@@ -4505,6 +4533,18 @@ html{
 
 .bayans-details{
    height: 400px;
+   background: url(../images/bg1.jpg) no-repeat;
+   background-size: cover;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+ }
+
+ .books{
+   height: 300px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
  }
 
 @media (max-width: 992px) {

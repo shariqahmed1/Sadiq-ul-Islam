@@ -52,7 +52,7 @@ class OurWork extends Component {
                 data-wow-delay="300ms"
               >
                 <h2 className="whitecolor">
-                  WE <span className="fontregular">TEACH</span>{" "}
+                  WE <span className="fontregular">Offer</span> Programs
                 </h2>
               </div>
             </div>
@@ -61,7 +61,9 @@ class OurWork extends Component {
             <ul className="process-wrapp">
               <li className="whitecolor wow fadeIn" data-wow-delay="400ms">
                 <span className="pro-step bottom20">01</span>
-                <p className="fontbold bottom25">NAZRA</p>
+                <p className="fontbold bottom25" style={{ fontSize: 20 }}>
+                  NAZRA
+                </p>
                 <p>
                   <b>"NAZRA"</b> means the ability to recite the Holy Quran.
                   <br />
@@ -78,7 +80,9 @@ class OurWork extends Component {
               </li>
               <li className="whitecolor wow fadeIn" data-wow-delay="500ms">
                 <span className="pro-step bottom20">02</span>
-                <p className="fontbold bottom25">HIFZ</p>
+                <p className="fontbold bottom25" style={{ fontSize: 20 }}>
+                  HIFZ
+                </p>
                 <p>
                   <b>"HIFZ"</b> means anyone who has completely memorized the
                   Qur'an.
@@ -96,7 +100,9 @@ class OurWork extends Component {
               </li>
               <li className="whitecolor wow fadeIn" data-wow-delay="600ms">
                 <span className="pro-step bottom20">03</span>
-                <p className="fontbold bottom25">DARS-E-NIZAMI</p>
+                <p className="fontbold bottom25" style={{ fontSize: 20 }}>
+                  DARS-E-NIZAMI
+                </p>
                 <p>
                   <b>"DARS-E-NIZAMI"</b> is a study curriculum or system used in
                   traditional Islamic institutions (madrassas) and Dar Ul
@@ -114,7 +120,9 @@ class OurWork extends Component {
               </li>
               <li className="whitecolor wow fadeIn" data-wow-delay="600ms">
                 <span className="pro-step bottom20">04</span>
-                <p className="fontbold bottom25">NAAT</p>
+                <p className="fontbold bottom25" style={{ fontSize: 20 }}>
+                  NAAT
+                </p>
                 <p>
                   <b>"NAAT"</b> is an Arabic word and it means, literally,
                   praise. In Urdu, naat means the praise of Prophet Hazrat

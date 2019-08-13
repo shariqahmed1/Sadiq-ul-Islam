@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { bayanDetails } from "../../redux/actions/actions";
 import { store } from "../../redux/store/store";
 import _ from "lodash";
@@ -95,20 +95,23 @@ class LatestAudio extends Component {
                 })
               : latestBayan.map((v, i) => {
                   return (
-                    <div className="cbp-item" key={i} style={styles.cbpItem}>
-                      <div className="cbp-item-wrapper">
-                        <div className="news_item shadow">
-                          <a className="image" href="javascript:void(0)">
+                    <Link
+                      key={i}
+                      to="/bayan-details"
+                      onClick={() => store.dispatch(bayanDetails(v))}
+                    >
+                      <div className="cbp-item" style={styles.cbpItem}>
+                        <div className="cbp-item-wrapper">
+                          <div className="news_item shadow">
                             <div className="img-responsive bayans">
                               <audio src={v.embed} controls />
                             </div>
-                          </a>
-                          <div className="news_desc">
-                            <h5 style={styles.cbpItemH5}>{v.speecherName}</h5>
-                            <h3 className="text-capitalize font-light darkcolor">
-                              <a href="javascript:void(0)">{v.title}</a>
-                            </h3>
-                            {/* <p
+                            <div className="news_desc">
+                              <h5 style={styles.cbpItemH5}>{v.speecherName}</h5>
+                              <h3 className="text-capitalize font-light darkcolor">
+                                <a href="javascript:void(0)">{v.title}</a>
+                              </h3>
+                              {/* <p
                               className="top20 bottom35"
                               dangerouslySetInnerHTML={{
                                 __html: v.description
@@ -118,34 +121,51 @@ class LatestAudio extends Component {
                                   : ""
                               }}
                             /> */}
-                            <div style={styles.btnWrapper}>
-                              <Link
-                                to="/bayan-details"
-                                className="button btnprimary btn-gradient-hvr"
-                                onClick={() => {
-                                  store.dispatch(bayanDetails(v));
-                                }}
-                              >
-                                Read more
-                              </Link>
-                              <a
-                                href={v.embed}
-                                className="button btnsecondary btn-gradient-hvr"
-                                download={v.title}
-                              >
-                                Download
-                              </a>
+                              <div style={styles.btnWrapper}>
+                                <Link
+                                  to="/bayan-details"
+                                  className="button btnprimary btn-gradient-hvr"
+                                  onClick={() => {
+                                    store.dispatch(bayanDetails(v));
+                                  }}
+                                >
+                                  Read more
+                                </Link>
+                                <a
+                                  href={v.embed}
+                                  download={v.embed}
+                                  className="button btnsecondary btn-gradient-hvr"
+                                >
+                                  Download
+                                </a>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   );
                 })}
+          </div>
+          <div className="row">
+            <div className="col-md-8 offset-md-2 col-sm-12 center-block text-center">
+              <div className="wow fadeInUp" data-wow-delay="300ms">
+                <br />
+                <a
+                  href="javascript:void(0)"
+                  className="top20 button btnprimary wow fadeInUp"
+                  data-wow-delay="450ms"
+                  onClick={() => this.props.history.push("/bayans")}
+                >
+                  {" "}
+                  MORE BAYANS
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </section>
     );
   }
 }
-export default LatestAudio;
+export default withRouter(LatestAudio);

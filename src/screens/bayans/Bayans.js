@@ -8,6 +8,25 @@ import { store } from "../../redux/store/store";
 import "../404/style.css";
 import _ from "lodash";
 import { bayanDetails } from "../../redux/actions/actions";
+import { Offline } from "react-detect-offline";
+
+const styles = {
+  cbpItem: {
+    width: 350,
+    left: 0,
+    top: 0
+  },
+  cbpItemH5: {
+    fontSize: 16,
+    fontWeight: 400,
+    marginTop: 10
+  },
+  btnWrapper: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center"
+  }
+};
 
 class Bayans extends Component {
   constructor(props) {
@@ -72,7 +91,6 @@ class Bayans extends Component {
       activeIndex - 1 === 0 ? 0 : (activeIndex - 1) * 9 + 1;
     const sliceEndPoint = sliceStartPoint + 9;
     const sliceArr = bayans.slice(sliceStartPoint, sliceEndPoint);
-    console.clear();
     return (
       <div>
         {/* <!-- header --> */}
@@ -103,91 +121,62 @@ class Bayans extends Component {
                 justifyContent: "center"
               }}
             >
-              {isLoading
-                ? [0, 1, 2].map(v => {
-                    return (
-                      <div
-                        key={"bayans-" + v}
-                        className="cbp-item"
-                        style={{
-                          width: 350,
-                          left: 0,
-                          top: 0
-                        }}
-                      >
-                        <div className="cbp-item-wrapper">
-                          <div className="news_item shadow">
-                            <a className="image" href="javascript:void(0)">
-                              <div
-                                className="loader-details-bayan"
-                                style={{ height: 250 }}
-                              />
-                            </a>
-                            <div className="news_desc">
-                              <h3 className="text-capitalize font-light darkcolor">
-                                <a href="javascript:void(0)">
-                                  <div className="loader-title-line" />
-                                </a>
-                              </h3>
-                              <p className="top20 bottom35">
-                                <div className="loader-desc-line" />
-                                <div className="loader-desc-line" />
-                                <div className="loader-desc-line" />
-                                <div className="loader-desc-line" />
-                                <div className="loader-desc-line" />
-                              </p>
+              {isLoading ? (
+                [0, 1, 2].map(v => {
+                  return (
+                    <div className="cbp-item" key={v} style={styles.cbpItem}>
+                      <div className="cbp-item-wrapper">
+                        <div className="news_item shadow">
+                          <a className="image" href="javascript:void(0)">
+                            <div
+                              className="loader-details-bayan"
+                              style={{ height: 250 }}
+                            />
+                          </a>
+                          <div className="news_desc">
+                            <h3 className="text-capitalize font-light darkcolor">
+                              <a href="javascript:void(0)">
+                                <div className="loader-title-line" />
+                              </a>
+                            </h3>
+                            <div className="top20 bottom35">
+                              <p className="loader-desc-line">{""}</p>
+                              <p className="loader-desc-line">{""}</p>
+                              <p className="loader-desc-line">{""}</p>
+                              <p className="loader-desc-line">{""}</p>
+                              <p className="loader-desc-line">{""}</p>
                             </div>
                           </div>
                         </div>
                       </div>
-                    );
-                  })
-                : sliceArr.map((v, i) => {
-                    return (
-                      <div
-                        key={i}
-                        className="cbp-item"
-                        style={{
-                          width: 350,
-                          left: 0,
-                          top: 0
-                        }}
-                      >
-                        <div className="cbp-item-wrapper">
-                          <div className="news_item shadow">
-                            <a className="image" href="javascript:void(0)">
-                              <iframe
-                                className="img-responsive bayans"
-                                title={"bayans" + i}
-                                scrolling="no"
-                                frameBorder="no"
-                                allow="autoplay"
-                                src={v.embed}
-                              />
-                            </a>
-                            <h5
-                              style={{
-                                fontSize: 16,
-                                fontWeight: 400,
-                                marginTop: 10
+                    </div>
+                  );
+                })
+              ) : sliceArr.length > 0 ? (
+                sliceArr.map((v, i) => {
+                  return (
+                    <div className="cbp-item" key={i} style={styles.cbpItem}>
+                      <div className="cbp-item-wrapper">
+                        <div className="news_item shadow">
+                          <div className="img-responsive bayans">
+                            <audio src={v.embed} controls />
+                          </div>
+                          <div className="news_desc">
+                            <h5 style={styles.cbpItemH5}>{v.speecherName}</h5>
+                            <h3 className="text-capitalize font-light darkcolor">
+                              <a href="javascript:void(0)">{v.title}</a>
+                            </h3>
+                            {/* <p
+                              className="top20 bottom35"
+                              dangerouslySetInnerHTML={{
+                                __html: v.description
+                                  ? v.description.length > 160
+                                    ? `${v.description.substr(0, 160)}...`
+                                    : v.description
+                                  : ""
                               }}
-                            >
-                              {v.speecherName}
-                            </h5>
-                            <div className="news_desc">
-                              <h3 className="text-capitalize font-light darkcolor">
-                                <a href="javascript:void(0)">{v.title}</a>
-                              </h3>
-                              <p
-                                className="top20 bottom35"
-                                dangerouslySetInnerHTML={{
-                                  __html: v.description
-                                    ? v.description.length > 160
-                                      ? `${v.description.substr(0, 160)}...`
-                                      : v.description
-                                    : "Bayan Desc Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-                                }}
-                              />
+                            /> */}
+                            <div style={styles.btnWrapper}>
                               <Link
                                 to="/bayan-details"
                                 className="button btnprimary btn-gradient-hvr"
@@ -197,12 +186,23 @@ class Bayans extends Component {
                               >
                                 Read more
                               </Link>
+                              <a
+                                className="button btnsecondary btn-gradient-hvr"
+                                href={v.embed}
+                                download={v.title}
+                              >
+                                Download
+                              </a>
                             </div>
                           </div>
                         </div>
                       </div>
-                    );
-                  })}
+                    </div>
+                  );
+                })
+              ) : (
+                <p>No Bayans Found</p>
+              )}
             </div>
             {isPagination && (
               <div className="row">

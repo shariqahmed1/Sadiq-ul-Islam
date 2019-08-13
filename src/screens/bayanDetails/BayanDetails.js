@@ -5,7 +5,7 @@ import PageHeader from "../../components/pageHeader/PageHeader";
 import Footer from "../../components/footer/Footer";
 import { store } from "../../redux/store/store";
 import "../404/style.css";
-import { FIRESTORE } from "../../constants/firebase/firebase";
+import { FIRESTORE, FIREBASE } from "../../constants/firebase/firebase";
 
 class Bayans extends Component {
   constructor(props) {
@@ -27,7 +27,16 @@ class Bayans extends Component {
   checkDetailIsExistOrNot(AuthReducer) {
     if (AuthReducer) {
       if (AuthReducer.bayanDetails) {
-        this.fetchBookDetails(AuthReducer.bayanDetails.id);
+        // console.log(
+        //   // new Date(AuthReducer.bayanDetails.timeStamp).toLocaleDateString(
+        //   //   "en-US"
+        //   // )
+        //   FIREBASE.firestore.Timestamp.fromDate(new Date())
+        // );
+        let data =
+          AuthReducer && AuthReducer.bayanDetails && AuthReducer.bayanDetails;
+        this.setState({ data, isLoading: data ? false : true });
+        // this.fetchBookDetails(AuthReducer.bayanDetails.id);
       } else {
         this.props.history.push("/bayans");
       }
@@ -36,19 +45,8 @@ class Bayans extends Component {
     }
   }
 
-  fetchBookDetails(id) {
-    FIRESTORE.collection("bayans")
-      .doc(id)
-      .onSnapshot(doc => {
-        this.setState({
-          data: doc.data(),
-          isLoading: false
-        });
-      });
-  }
-
   render() {
-    console.clear();
+    // console.clear();
     const { isLoading, data } = this.state;
     return (
       <div>
@@ -85,14 +83,9 @@ class Bayans extends Component {
                     {isLoading ? (
                       <div className="loader-details-bayan" />
                     ) : (
-                      <iframe
-                        className="img-responsive bayans-details"
-                        title={"bayans"}
-                        scrolling="no"
-                        frameBorder="no"
-                        allow="autoplay"
-                        src={data.embed}
-                      />
+                      <div className="img-responsive bayans-details">
+                        <audio src={data.embed} controls />
+                      </div>
                     )}
                   </div>
                   <div className="news_desc text-left">
