@@ -144,19 +144,19 @@ class Bayans extends Component {
                                 style={{ height: 250 }}
                               />
                             </a>
-                            <div class="news_desc">
-                              <h3 class="text-capitalize font-light darkcolor">
+                            <div className="news_desc">
+                              <h3 className="text-capitalize font-light darkcolor">
                                 <a href="javascript:void(0)">
-                                  <div class="loader-title-line" />
+                                  <div className="loader-title-line" />
                                 </a>
                               </h3>
-                              <p class="top20 bottom35">
-                                <div class="loader-desc-line" />
-                                <div class="loader-desc-line" />
-                                <div class="loader-desc-line" />
-                                <div class="loader-desc-line" />
-                                <div class="loader-desc-line" />
-                              </p>
+                              <div className="top20 bottom35">
+                                <p className="loader-desc-line">{""}</p>
+                                <p className="loader-desc-line">{""}</p>
+                                <p className="loader-desc-line">{""}</p>
+                                <p className="loader-desc-line">{""}</p>
+                                <p className="loader-desc-line">{""}</p>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -165,49 +165,55 @@ class Bayans extends Component {
                   })
                 : sliceArr.map((v, i) => {
                     return (
-                      <div className="cbp-item" key={i} style={styles.cbpItem}>
-                        <div className="cbp-item-wrapper">
-                          <div className="news_item shadow">
-                            <div className="img-responsive books">
-                              <img
-                                src={v.bookImage}
-                                alt="Not found!"
-                                style={styles.image}
-                              />
-                            </div>
-                            <div className="news_desc">
-                              <h5 style={styles.cbpItemH5}>{v.authorName}</h5>
-                              <h3 className="text-capitalize font-light darkcolor">
-                                <a href="javascript:void(0)">{v.title}</a>
-                              </h3>
-                              <div style={styles.btnWrapper}>
-                                <a
-                                  href={v.pdf}
-                                  className="button btnsecondary btn-gradient-hvr"
-                                >
-                                  <i className="fa fa-book" />
-                                </a>
-                                <Link
-                                  to="/book-details"
-                                  className="button btnprimary btn-gradient-hvr"
-                                  onClick={() => {
-                                    store.dispatch(bookDetails(v));
-                                  }}
-                                >
-                                  Read More
-                                </Link>
-                                <a
-                                  href={v.pdf}
-                                  download={v.pdf}
-                                  className="button btnsecondary btn-gradient-hvr"
-                                >
-                                  <i className="fa fa-download" />
-                                </a>
+                      <Link
+                        key={i}
+                        to="/book-details"
+                        onClick={() => store.dispatch(bookDetails(v))}
+                      >
+                        <div className="cbp-item" style={styles.cbpItem}>
+                          <div className="cbp-item-wrapper">
+                            <div className="news_item shadow">
+                              <div className="img-responsive books">
+                                <img
+                                  src={v.bookImage}
+                                  alt="Not found!"
+                                  style={styles.image}
+                                />
+                              </div>
+                              <div className="news_desc">
+                                <h5 style={styles.cbpItemH5}>{v.authorName}</h5>
+                                <h3 className="text-capitalize font-light darkcolor">
+                                  <a href="javascript:void(0)">{v.title}</a>
+                                </h3>
+                                <div style={styles.btnWrapper}>
+                                  <a
+                                    href={v.pdf}
+                                    className="button btnsecondary btn-gradient-hvr"
+                                  >
+                                    <i className="fa fa-book" />
+                                  </a>
+                                  <Link
+                                    to="/book-details"
+                                    className="button btnprimary btn-gradient-hvr"
+                                    onClick={() => {
+                                      store.dispatch(bookDetails(v));
+                                    }}
+                                  >
+                                    Read More
+                                  </Link>
+                                  <a
+                                    href={v.pdf}
+                                    download={v.pdf}
+                                    className="button btnsecondary btn-gradient-hvr"
+                                  >
+                                    <i className="fa fa-download" />
+                                  </a>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </Link>
                     );
                   })}
             </div>

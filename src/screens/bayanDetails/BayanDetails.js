@@ -27,16 +27,9 @@ class Bayans extends Component {
   checkDetailIsExistOrNot(AuthReducer) {
     if (AuthReducer) {
       if (AuthReducer.bayanDetails) {
-        // console.log(
-        //   // new Date(AuthReducer.bayanDetails.timeStamp).toLocaleDateString(
-        //   //   "en-US"
-        //   // )
-        //   FIREBASE.firestore.Timestamp.fromDate(new Date())
-        // );
         let data =
           AuthReducer && AuthReducer.bayanDetails && AuthReducer.bayanDetails;
         this.setState({ data, isLoading: data ? false : true });
-        // this.fetchBookDetails(AuthReducer.bayanDetails.id);
       } else {
         this.props.history.push("/bayans");
       }
@@ -122,9 +115,9 @@ class Bayans extends Component {
                     </ul>
                     {isLoading ? (
                       <div className="bottom35">
-                        <div className="loader-desc-line" />
-                        <div className="loader-desc-line" />
-                        <div className="loader-desc-line" />
+                        <p className="loader-desc-line" />
+                        <p className="loader-desc-line" />
+                        <p className="loader-desc-line" />
                       </div>
                     ) : (
                       <p

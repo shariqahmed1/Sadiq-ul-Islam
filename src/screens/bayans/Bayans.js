@@ -155,18 +155,23 @@ class Bayans extends Component {
               ) : sliceArr.length > 0 ? (
                 sliceArr.map((v, i) => {
                   return (
-                    <div className="cbp-item" key={i} style={styles.cbpItem}>
-                      <div className="cbp-item-wrapper">
-                        <div className="news_item shadow">
-                          <div className="img-responsive bayans">
-                            <audio src={v.embed} controls />
-                          </div>
-                          <div className="news_desc">
-                            <h5 style={styles.cbpItemH5}>{v.speecherName}</h5>
-                            <h3 className="text-capitalize font-light darkcolor">
-                              <a href="javascript:void(0)">{v.title}</a>
-                            </h3>
-                            {/* <p
+                    <Link
+                      key={i}
+                      to="/bayan-details"
+                      onClick={() => store.dispatch(bayanDetails(v))}
+                    >
+                      <div className="cbp-item" style={styles.cbpItem}>
+                        <div className="cbp-item-wrapper">
+                          <div className="news_item shadow">
+                            <div className="img-responsive bayans">
+                              <audio src={v.embed} controls />
+                            </div>
+                            <div className="news_desc">
+                              <h5 style={styles.cbpItemH5}>{v.speecherName}</h5>
+                              <h3 className="text-capitalize font-light darkcolor">
+                                <a href="javascript:void(0)">{v.title}</a>
+                              </h3>
+                              {/* <p
                               className="top20 bottom35"
                               dangerouslySetInnerHTML={{
                                 __html: v.description
@@ -176,28 +181,29 @@ class Bayans extends Component {
                                   : ""
                               }}
                             /> */}
-                            <div style={styles.btnWrapper}>
-                              <Link
-                                to="/bayan-details"
-                                className="button btnprimary btn-gradient-hvr"
-                                onClick={() => {
-                                  store.dispatch(bayanDetails(v));
-                                }}
-                              >
-                                Read more
-                              </Link>
-                              <a
-                                className="button btnsecondary btn-gradient-hvr"
-                                href={v.embed}
-                                download={v.title}
-                              >
-                                Download
-                              </a>
+                              <div style={styles.btnWrapper}>
+                                <Link
+                                  to="/bayan-details"
+                                  className="button btnprimary btn-gradient-hvr"
+                                  onClick={() => {
+                                    store.dispatch(bayanDetails(v));
+                                  }}
+                                >
+                                  Read more
+                                </Link>
+                                <a
+                                  className="button btnsecondary btn-gradient-hvr"
+                                  href={v.embed}
+                                  download={v.title}
+                                >
+                                  Download
+                                </a>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   );
                 })
               ) : (

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FIRESTORE } from "../../constants/firebase/firebase";
+import { store } from "../../redux/store/store";
 
 class Counters extends Component {
   constructor(props) {
@@ -12,25 +12,31 @@ class Counters extends Component {
   }
 
   componentDidMount() {
-    this.fetchingBayansLength();
-    this.fetchingBooksLength();
+    this.getStatesFromRedux();
+    store.subscribe(() => this.getStatesFromRedux());
   }
 
-  fetchingBayansLength = () => {
-    FIRESTORE.collection("bayans").onSnapshot(snap => {
-      this.setState({ bayans: snap.size });
-    });
-  };
-
-  fetchingBooksLength = () => {
-    FIRESTORE.collection("books").onSnapshot(snap => {
-      this.setState({ books: snap.size });
-    });
+  getStatesFromRedux = () => {
+    let { AuthReducer } = store.getState();
+    let bayans = AuthReducer
+      ? AuthReducer.bayans
+        ? AuthReducer.bayans.length
+          ? AuthReducer.bayans.length
+          : 0
+        : 0
+      : 0;
+    let books = AuthReducer
+      ? AuthReducer.books
+        ? AuthReducer.books.length
+          ? AuthReducer.books.length
+          : 0
+        : 0
+      : 0;
+    this.setState({ bayans, books });
   };
 
   render() {
     const { books, bayans } = this.state;
-    // console.clear();
     return (
       <section
         id="funfacts"

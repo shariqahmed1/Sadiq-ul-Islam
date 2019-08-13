@@ -4,7 +4,6 @@ import OthersPageHeader from "../../components/othersPageHeader/OthersPageHeader
 import PageHeader from "../../components/pageHeader/PageHeader";
 import Footer from "../../components/footer/Footer";
 import { Link } from "react-router-dom";
-import Modal from "react-animated-modal";
 import { store } from "../../redux/store/store";
 import "../404/style.css";
 import { FIRESTORE } from "../../constants/firebase/firebase";
@@ -29,24 +28,15 @@ class BookDetails extends Component {
   checkDetailIsExistOrNot(AuthReducer) {
     if (AuthReducer) {
       if (AuthReducer.bookDetails) {
-        this.fetchBookDetails(AuthReducer.bookDetails.id);
+        let data =
+          AuthReducer && AuthReducer.bookDetails && AuthReducer.bookDetails;
+        this.setState({ data, isLoading: data ? false : true });
       } else {
         this.props.history.push("/books");
       }
     } else {
       this.props.history.push("/books");
     }
-  }
-
-  fetchBookDetails(id) {
-    FIRESTORE.collection("books")
-      .doc(id)
-      .onSnapshot(doc => {
-        this.setState({
-          data: doc.data(),
-          isLoading: false
-        });
-      });
   }
 
   render() {
@@ -56,24 +46,6 @@ class BookDetails extends Component {
       <div>
         {/* <!-- header --> */}
         <OthersPageHeader />
-        {!isLoading && (
-          <Modal
-            visible={this.state.showModal}
-            closemodal={() => this.setState({ showModal: false })}
-            type={this.state.type}
-          >
-            <iframe
-              title={"books"}
-              scrolling="no"
-              frameBorder="0"
-              webkitallowfullscreen="true"
-              mozallowfullscreen="true"
-              allowfullscreen
-              style={{ width: "100%", height: "100%" }}
-              src={data.embed}
-            />
-          </Modal>
-        )}
         {/* <!--PageHeader--> */}
         <PageHeader
           title={"Book Details"}
@@ -105,13 +77,13 @@ class BookDetails extends Component {
                       <div class="loader-details-image" />
                     ) : (
                       <img
-                        src={data.url}
+                        src={data.bookImage}
                         alt="Latest News"
                         class="img-responsive details-page-image-wrapper"
                       />
                     )}
                   </div>
-                  <div class="news_desc text-left">
+                  <div class="news_desc text-left" style={{ marginTop: 20 }}>
                     <h3 class="text-capitalize font-light darkcolor text-center">
                       {isLoading ? (
                         <div class="loader-title-line" />
@@ -142,9 +114,9 @@ class BookDetails extends Component {
                     </ul>
                     {isLoading ? (
                       <div class="bottom35">
-                        <div class="loader-desc-line" />
-                        <div class="loader-desc-line" />
-                        <div class="loader-desc-line" />
+                        <p class="loader-desc-line" />
+                        <p class="loader-desc-line" />
+                        <p class="loader-desc-line" />
                       </div>
                     ) : (
                       <p
@@ -158,25 +130,25 @@ class BookDetails extends Component {
                       <div
                         style={{
                           flex: 1,
-                          justifyContent: "space-evenly",
-                          display: "flex"
+                          justifyContent: "center",
+                          display: "flex",
+                          alignItems: "center",
+                          flexDirection: "row"
                         }}
                       >
-                        {data.downloadUrl && (
-                          <a
-                            href={data.downloadUrl}
-                            class="button btnprimary btn-gradient-hvr"
-                            style={{ marginRight: 5 }}
-                          >
-                            Download
-                          </a>
-                        )}
-                        <Link
-                          onClick={() => this.setState({ showModal: true })}
+                        <a
+                          href={data.pdf}
                           class="button btnsecondary scndry-gradient-hvr"
                         >
                           Online Read
-                        </Link>
+                        </a>
+                        <a
+                          href={data.pdf}
+                          className="button btnprimary btn-gradient-hvr"
+                        >
+                          <span style={{ marginRight: 10 }}>Download</span>
+                          <i className="fa fa-download" />{" "}
+                        </a>
                       </div>
                     )}
                   </div>

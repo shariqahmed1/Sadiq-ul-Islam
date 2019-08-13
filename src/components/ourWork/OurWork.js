@@ -1,47 +1,22 @@
 import React, { Component } from "react";
-import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
+import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
+import Rodal from "rodal";
+import "rodal/lib/rodal.css";
 
 class OurWork extends Component {
-  state = {
-    open: false
-  };
-
-  handleClose = () => {
-    this.setState({ open: false });
-  };
-
-  renderDialog() {
-    return (
-      <Dialog
-        open={this.state.open}
-        onClose={this.handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"What about your Donations?"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            We will provide you our information will be soon
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={this.handleClose} color="primary">
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
+  constructor(props) {
+    super(props);
+    this.state = {
+      showModal: false
+    };
   }
 
   render() {
-    // console.clear();
     return (
       <section id="video-parallax" className="video-parallax padding">
         <div className="container">
@@ -140,16 +115,35 @@ class OurWork extends Component {
                   href="javascript:void(0)"
                   className="top20 button btnprimary wow fadeInUp"
                   data-wow-delay="450ms"
-                  onClick={() => this.setState({ open: true })}
+                  onClick={() => this.setState({ showModal: true })}
                 >
                   {" "}
                   DONATE NOW
                 </a>
               </div>
             </div>
+            <Rodal
+              visible={this.state.showModal}
+              width={330}
+              onClose={() => this.setState({ showModal: false })}
+            >
+              <div
+                id="alert-dialog-title"
+                style={{ fontSize: 20, fontWeight: "bold", marginTop: 20 }}
+              >
+                {"What about your Donations?"}
+              </div>
+              <p style={{ marginTop: 10 }}>
+                If you want your donations (Atiyaat, Sadqaat, Fitraat, and
+                Zakat) to be spent in a right way, please donate us then we will
+                them in religious works. We will provide our information as soon
+                as
+                <br />
+                <span style={{ fontWeight: "bold" }}>Jazak Allah!</span>
+              </p>
+            </Rodal>
           </div>
         </div>
-        {this.renderDialog()}
       </section>
     );
   }

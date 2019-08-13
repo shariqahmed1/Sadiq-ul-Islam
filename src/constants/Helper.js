@@ -1,42 +1,18 @@
-const Helpers = {
-  // Main wrapper for Fetch API
-  httpRequest: (url, method, payload, headers) => {
-    // Configuration to accept json as a default
-    const config = {
-      method,
-      headers: {
-        "Content-Type": "application/json"
+export const ABBR_NUM = number => {
+  let abbrev = ["K", "M", "B", "T"];
+  for (var i = abbrev.length - 1; i >= 0; i--) {
+    var size = Math.pow(10, (i + 1) * 3);
+    if (size <= number) {
+      number = Math.abs(number / size);
+      if (number == 1000 && i < abbrev.length - 1) {
+        number = 1;
+        i++;
       }
-    };
-    // method = post and payload, add it to the fetch request
-    if (method.toLowerCase() === "post" && payload && payload.length > 0) {
-      config.body = JSON.stringify(payload);
+      var round = Math.floor(number);
+      var addPlus = round < number ? "+" : "";
+      number = round + abbrev[i] + addPlus;
+      break;
     }
-    // if custom headers need to be set for the specific request
-    // override them here
-    if (
-      headers &&
-      typeof headers === "object" &&
-      Object.keys(headers).length > 0
-    ) {
-      config.headers = headers;
-    }
-    return fetch(url, config).then(response => {
-      // Check if the request is 200
-      if (response.ok) {
-        let data = response;
-
-        // if the type is json return, interpret it as json
-        if (
-          response.headers.get("Content-Type").indexOf("application/json") > -1
-        ) {
-          data = response.json();
-        }
-        return data;
-      }
-      // if an errors, anything but 200 then reject with the actuall response
-      return Promise.reject(response);
-    });
   }
+  return number;
 };
-export default Helpers;
