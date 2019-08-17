@@ -22,14 +22,12 @@ class Routes extends Component {
   };
 
   render() {
-    // console.clear();
     return (
       <Router history={history}>
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/bayans" component={Bayans} />
           <Route path="/bayan-details" component={BayanDetails} />
-          {/* <Route path="/bayan-details/:id" component={BayanDetails} /> */}
           <Route exact path="/books" component={Books} />
           <Route path="/book-details" component={BookDetails} />
           <Route exact path="/speecher" component={Speecher} />
@@ -43,24 +41,5 @@ class Routes extends Component {
     );
   }
 }
-
-// const PrivateRoute = ({ component: Component, login, ...rest }) => {
-//   return (
-//     <Route
-//       {...rest}
-//       render={props =>
-//         login ? (
-//           <Component {...props} />
-//         ) : (
-//           <Redirect
-//             to={{
-//               pathname: "/login"
-//             }}
-//           />
-//         )
-//       }
-//     />
-//   );
-// };
 
 export default Routes;

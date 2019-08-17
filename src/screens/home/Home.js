@@ -9,7 +9,6 @@ import Events from "../../components/events/Events";
 import Counters from "../../components/counters/Counters";
 import Contact from "../../components/contact/Contact";
 import Footer from "../../components/footer/Footer";
-// import { store } from "../../redux/store/store";
 import SnackBar from "../../components/snackBar/SnackBar";
 
 class Home extends Component {

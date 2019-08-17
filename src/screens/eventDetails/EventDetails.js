@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "font-awesome/css/font-awesome.min.css";
-import OthersPageHeader from "../../components/othersPageHeader/OthersPageHeader";
+import Header from "../../components/header/Header";
 import PageHeader from "../../components/pageHeader/PageHeader";
 import Footer from "../../components/footer/Footer";
 import { store } from "../../redux/store/store";
@@ -40,11 +40,10 @@ class EventDetails extends Component {
 
   render() {
     const { isLoading, data } = this.state;
-    console.clear();
     return (
       <div>
         {/* <!-- header --> */}
-        <OthersPageHeader />
+        <Header />
 
         {/* <!--PageHeader--> */}
         <PageHeader
@@ -67,19 +66,19 @@ class EventDetails extends Component {
             }
           ]}
         />
-        <section id="our-blog" class="padding bglight">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="news_item shadow">
-                  <div class="image">
+        <section id="our-blog" className="padding bglight">
+          <div className="container">
+            <div className="row">
+              <div className="col-md-12">
+                <div className="news_item shadow">
+                  <div className="image">
                     {isLoading ? (
-                      <div class="loader-details-image" />
+                      <div className="loader-details-image" />
                     ) : (
                       <img
                         src={data.url}
                         alt="Latest News"
-                        class="img-responsive"
+                        className="img-responsive"
                         style={{
                           height: 200,
                           width: 200,
@@ -92,28 +91,28 @@ class EventDetails extends Component {
                       />
                     )}
                   </div>
-                  <div class="news_desc text-left">
+                  <div className="news_desc text-left">
                     <h2
-                      class="text-capitalize font-light darkcolor text-center"
+                      className="text-capitalize font-light darkcolor text-center"
                       style={{ fontSize: 35 }}
                     >
                       {isLoading ? (
-                        <div class="loader-title-line" />
+                        <div className="loader-title-line" />
                       ) : (
                         data.title
                       )}
                     </h2>
-                    <ul class="meta-tags top20 bottom20">
+                    <ul className="meta-tags top20 bottom20">
                       <li>
                         {" "}
                         {!isLoading && (
                           <i
                             style={{ marginBottom: 6 }}
-                            class="fa fa-calendar"
+                            className="fa fa-calendar"
                           />
                         )}
                         {isLoading ? (
-                          <div class="loader-text-line" />
+                          <div className="loader-text-line" />
                         ) : (
                           <span
                             style={{
@@ -129,14 +128,14 @@ class EventDetails extends Component {
                       </li>
                     </ul>
                     {isLoading ? (
-                      <div class="bottom35">
-                        <div class="loader-desc-line" />
-                        <div class="loader-desc-line" />
-                        <div class="loader-desc-line" />
+                      <div className="bottom35">
+                        <div className="loader-desc-line" />
+                        <div className="loader-desc-line" />
+                        <div className="loader-desc-line" />
                       </div>
                     ) : (
                       <p
-                        class="bottom35"
+                        className="bottom35"
                         style={{
                           textAlign: !data.description ? "center" : "justify"
                         }}

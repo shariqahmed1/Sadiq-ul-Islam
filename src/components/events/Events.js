@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-// import { FIRESTORE } from "../../constants/firebase/firebase";
 import { Link } from "react-router-dom";
 import { eventDetails } from "../../redux/actions/actions";
 import { store } from "../../redux/store/store";

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "font-awesome/css/font-awesome.min.css";
-import OthersPageHeader from "../../components/othersPageHeader/OthersPageHeader";
+import Header from "../../components/header/Header";
 import PageHeader from "../../components/pageHeader/PageHeader";
 import Footer from "../../components/footer/Footer";
 import { store } from "../../redux/store/store";
@@ -106,12 +106,11 @@ class Events extends Component {
   // }
 
   render() {
-    console.clear();
     const { isLoading, events } = this.state;
     return (
       <div>
         {/* <!-- header --> */}
-        <OthersPageHeader />
+        <Header />
 
         {/* <!--PageHeader--> */}
         <PageHeader

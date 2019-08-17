@@ -1,15 +1,40 @@
 import React, { Component } from "react";
 import "font-awesome/css/font-awesome.min.css";
-import OthersPageHeader from "../../components/othersPageHeader/OthersPageHeader";
+import Header from "../../components/header/Header";
 import PageHeader from "../../components/pageHeader/PageHeader";
-import Contact from "../../components/contact/Contact";
 import Footer from "../../components/footer/Footer";
 import { Link } from "react-router-dom";
 import { store } from "../../redux/store/store";
 import "../404/style.css";
-import { FIRESTORE } from "../../constants/firebase/firebase";
 import _ from "lodash";
 import { bookDetails } from "../../redux/actions/actions";
+
+const styles = {
+  wrapper: {
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center"
+  },
+  cbpItem: {
+    width: 350,
+    left: 0,
+    top: 0
+  },
+  cbpItemH5: {
+    fontSize: 16,
+    fontWeight: 400,
+    marginTop: 10
+  },
+  btnWrapper: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center"
+  },
+  image: {
+    width: "100%",
+    height: "100%"
+  }
+};
 
 class Author extends Component {
   constructor(props) {
@@ -28,101 +53,38 @@ class Author extends Component {
   }
 
   componentDidMount() {
-    let state = store.getState().AuthReducer;
-    if (state) {
-      if (state.authorName) {
-        this.setState({
-          authorName: state.authorName
-        });
-        this.fetchBooks(state.authorName);
-        // this.fetchLimits(state.authorName);
-      } else {
-        this.props.history.push("/");
-      }
-    } else {
-      this.props.history.push("/");
+    this.getStatesFromRedux();
+    store.subscribe(() => this.getStatesFromRedux());
+  }
+
+  getStatesFromRedux = () => {
+    let { AuthReducer } = store.getState();
+    let books = AuthReducer ? (AuthReducer.books ? AuthReducer.books : []) : [];
+    let authorName = AuthReducer
+      ? AuthReducer.authorName
+        ? AuthReducer.authorName
+        : ""
+      : "";
+    let filter = books.filter(v => v.authorName === authorName);
+    let reverse = _.sortBy(filter, ["timeStamp"]).reverse();
+    this.setState({ books: reverse, isLoading: false, authorName });
+    reverse.length > 0 && this.calculatePagination(reverse.length);
+  };
+
+  calculatePagination(size) {
+    let { pages } = this.state;
+    pages = [];
+    let dvd = size / 9;
+    let ceil = Math.ceil(dvd);
+    for (let index = 1; index <= ceil; index++) {
+      pages.push(index);
     }
+    this.setState({
+      pages,
+      isPagination: true,
+      activePages: pages.slice(0, 3)
+    });
   }
-
-  fetchBooks(authorName) {
-    let { books } = this.state;
-    FIRESTORE.collection("books")
-      .where("author", "==", authorName)
-      // .orderBy("author")
-      // .orderBy("index", "desc")
-      // .limit(9)
-      .onSnapshot(snapshot => {
-        books = [];
-        if (snapshot.empty) {
-          this.props.history.push("/");
-        } else {
-          snapshot.forEach(doc => {
-            var obj = doc.data();
-            obj.id = doc.id;
-            books.push(obj);
-          });
-          this.setState({
-            books,
-            isLoading: false
-          });
-        }
-      });
-  }
-
-  // fetchLimits(authorName) {
-  //   FIRESTORE.collection("books")
-  //     .where("author", ">=", authorName)
-  //     .orderBy("author")
-  //     .orderBy("index", "desc")
-  //     .onSnapshot(snapshot => {
-  //       this.setState({
-  //         total: snapshot.size
-  //       });
-  //       this.calculatePagination(snapshot.size);
-  //     });
-  // }
-
-  // fetchByPagination(pageNum) {
-  //   let { books, total, authorName } = this.state;
-  //   let startAt = total - pageNum * 9;
-  //   let endAt = startAt + 9;
-  //   this.setState({
-  //     isLoading: true
-  //   });
-  //   FIRESTORE.collection("books")
-  //     .where("author", "==", authorName)
-  //     .orderBy("index")
-  //     .startAt(startAt + 1)
-  //     .endAt(endAt)
-  //     .get()
-  //     .then(snapshot => {
-  //       books = [];
-  //       snapshot.forEach(doc => {
-  //         books.push(doc.data());
-  //       });
-  //       let reverse = _.reverse(books);
-  //       this.setState({
-  //         books: reverse,
-  //         isLoading: false,
-  //         activeIndex: pageNum
-  //       });
-  //     });
-  // }
-
-  // calculatePagination(size) {
-  //   let { pages } = this.state;
-  //   pages = [];
-  //   let dvd = size / 9;
-  //   let ceil = Math.ceil(dvd);
-  //   for (let index = 1; index <= ceil; index++) {
-  //     pages.push(index);
-  //   }
-  //   this.setState({
-  //     pages,
-  //     isPagination: true,
-  //     activePages: pages.slice(0, 3)
-  //   });
-  // }
 
   render() {
     const {
@@ -136,12 +98,15 @@ class Author extends Component {
     } = this.state;
     const length = pages.length;
     const activePagelength = activePages.length;
-    console.clear();
+    const sliceStartPoint =
+      activeIndex - 1 === 0 ? 0 : (activeIndex - 1) * 9 + 1;
+    const sliceEndPoint = sliceStartPoint + 9;
+    const sliceArr = books.slice(sliceStartPoint, sliceEndPoint);
 
     return (
       <div>
         {/* <!-- header --> */}
-        <OthersPageHeader />
+        <Header />
 
         {/* <!--PageHeader--> */}
         <PageHeader
@@ -159,8 +124,8 @@ class Author extends Component {
             }
           ]}
         />
-        <section id="our-blog" class="bglight padding text-center">
-          <div class="container">
+        <section id="our-blog" className="bglight padding text-center">
+          <div className="container">
             <div
               style={{
                 display: "flex",
@@ -173,104 +138,96 @@ class Author extends Component {
                     return (
                       <div
                         key={"bayans-" + v}
-                        class="cbp-item"
+                        className="cbp-item"
                         style={{ width: 350, left: 0, top: 0 }}
                       >
-                        <div class="cbp-item-wrapper">
-                          <div class="news_item shadow">
-                            <a class="image" href="javascript:void(0)">
+                        <div className="cbp-item-wrapper">
+                          <div className="news_item shadow">
+                            <a className="image" href="javascript:void(0)">
                               <div
-                                class="loader-details-bayan"
+                                className="loader-details-bayan"
                                 style={{ height: 250 }}
                               />
                             </a>
-                            <div class="news_desc">
-                              <h3 class="text-capitalize font-light darkcolor">
+                            <div className="news_desc">
+                              <h3 className="text-capitalize font-light darkcolor">
                                 <a href="javascript:void(0)">
-                                  <div class="loader-title-line" />
+                                  <div className="loader-title-line" />
                                 </a>
                               </h3>
-                              <p class="top20 bottom35">
-                                <div class="loader-desc-line" />
-                                <div class="loader-desc-line" />
-                                <div class="loader-desc-line" />
-                                <div class="loader-desc-line" />
-                                <div class="loader-desc-line" />
-                              </p>
+                              <div className="top20 bottom35">
+                                <p className="loader-desc-line">{""}</p>
+                                <p className="loader-desc-line">{""}</p>
+                                <p className="loader-desc-line">{""}</p>
+                                <p className="loader-desc-line">{""}</p>
+                                <p className="loader-desc-line">{""}</p>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     );
                   })
-                : books.map((v, i) => {
+                : sliceArr.map((v, i) => {
                     return (
-                      <div
-                        key={i}
-                        class="cbp-item"
-                        style={{
-                          width: 350,
-                          left: 0,
-                          top: 0
-                        }}
-                      >
-                        <div class="cbp-item-wrapper">
-                          <div class="news_item shadow">
-                            <a class="image" href="javascript:void(0)">
-                              <img
-                                src={v.url}
-                                alt="Latest News"
-                                class="img-responsive bayans"
-                              />
+                      // <Link
+                      //   key={i}
+                      //   to="/book-details"
+                      //   onClick={() => store.dispatch(bookDetails(v))}
+                      // >
+                      <div className="books-wrapper" key={i}>
+                        <div className="img-responsive books">
+                          <img
+                            src={v.bookImage}
+                            alt="Not found!"
+                            style={styles.image}
+                          />
+                        </div>
+                        <div className="books-bottom-wrapper">
+                          <h5 style={styles.cbpItemH5}>{v.authorName}</h5>
+                          <h3 className="text-capitalize font-light darkcolor">
+                            {v.title}
+                          </h3>
+                          <div style={styles.btnWrapper}>
+                            <a
+                              href={v.pdf}
+                              className="button btnsecondary btn-gradient-hvr"
+                            >
+                              <i className="fa fa-book" />
                             </a>
-                            <div class="news_desc">
-                              <h3 class="text-capitalize font-light darkcolor">
-                                <a href="javascript:void(0)">{v.title}</a>
-                              </h3>
-                              <h5
-                                style={{
-                                  fontSize: 16,
-                                  fontWeight: 400,
-                                  marginTop: 10
-                                }}
-                              >
-                                {v.author}
-                              </h5>
-                              <p
-                                class="top20 bottom35"
-                                dangerouslySetInnerHTML={{
-                                  __html: v.description
-                                    ? v.description.length > 160
-                                      ? `${v.description.substr(0, 160)}...`
-                                      : v.description
-                                    : "Bayan Desc Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s"
-                                }}
-                              />
-                              <Link
-                                to="/book-details"
-                                class="button btnprimary btn-gradient-hvr"
-                                onClick={() => {
-                                  store.dispatch(bookDetails(v));
-                                }}
-                              >
-                                Read more
-                              </Link>
-                            </div>
+                            <Link
+                              to="/book-details"
+                              className="button btnprimary btn-gradient-hvr"
+                              onClick={() => {
+                                store.dispatch(bookDetails(v));
+                              }}
+                            >
+                              Read More
+                            </Link>
+                            <a
+                              href={v.pdf}
+                              download={v.pdf}
+                              className="button btnsecondary btn-gradient-hvr"
+                            >
+                              <i className="fa fa-download" />
+                            </a>
                           </div>
                         </div>
                       </div>
+                      // </Link>
                     );
                   })}
             </div>
+
             {isPagination && (
-              <div class="row">
-                <div class="col-sm-12">
+              <div className="row">
+                <div className="col-sm-12">
                   <ul
-                    class="pagination justify-content-center top50"
+                    className="pagination justify-content-center top50"
                     style={{ display: "flex" }}
                   >
                     <li
-                      class={
+                      className={
                         activePages[0] === pages[0]
                           ? "page-item disabled"
                           : "page-item"
@@ -286,20 +243,20 @@ class Author extends Component {
                           : console.log("No Pages");
                       }}
                     >
-                      <a class="page-link" href="javascript:void(0)">
-                        <i class="fa fa-angle-left" />
+                      <a className="page-link" href="javascript:void(0)">
+                        <i className="fa fa-angle-left" />
                       </a>
                     </li>
                     {activePages.map(v => {
                       return (
                         <li
-                          key={v}
                           className={
                             activeIndex === v ? "page-item active" : "page-item"
                           }
                           onClick={() =>
                             activeIndex !== v && this.fetchByPagination(v)
                           }
+                          key={v}
                         >
                           <a className="page-link" href="javascript:void(0)">
                             {v}
@@ -308,7 +265,7 @@ class Author extends Component {
                       );
                     })}
                     <li
-                      class={
+                      className={
                         activePages[activePagelength - 1] === pages[length - 1]
                           ? "page-item disabled"
                           : "page-item"
@@ -324,8 +281,8 @@ class Author extends Component {
                           : console.log("No Pages");
                       }}
                     >
-                      <a class="page-link" href="javascript:void(0)">
-                        <i class="fa fa-angle-right" />
+                      <a className="page-link" href="javascript:void(0)">
+                        <i className="fa fa-angle-right" />
                       </a>
                     </li>
                   </ul>

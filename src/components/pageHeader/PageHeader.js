@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const PageHeader = props => {
-  // console.clear();
   return (
     <section className="page-header parallax padding_top center-block">
       <div className="container">

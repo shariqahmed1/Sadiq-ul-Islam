@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "font-awesome/css/font-awesome.min.css";
-import OthersPageHeader from "../../components/othersPageHeader/OthersPageHeader";
+import Header from "../../components/header/Header";
 import PageHeader from "../../components/pageHeader/PageHeader";
 import Footer from "../../components/footer/Footer";
 import { Link } from "react-router-dom";
@@ -97,11 +97,10 @@ class Bayans extends Component {
       activeIndex - 1 === 0 ? 0 : (activeIndex - 1) * 9 + 1;
     const sliceEndPoint = sliceStartPoint + 9;
     const sliceArr = books.slice(sliceStartPoint, sliceEndPoint);
-    console.clear();
     return (
       <div>
         {/* <!-- header --> */}
-        <OthersPageHeader />
+        <Header />
 
         {/* <!--PageHeader--> */}
         <PageHeader
@@ -119,8 +118,8 @@ class Bayans extends Component {
             }
           ]}
         />
-        <section id="our-blog" class="bglight padding text-center">
-          <div class="container">
+        <section id="our-blog" className="bglight padding text-center">
+          <div className="container">
             <div
               style={{
                 display: "flex",
@@ -133,14 +132,14 @@ class Bayans extends Component {
                     return (
                       <div
                         key={"bayans-" + v}
-                        class="cbp-item"
+                        className="cbp-item"
                         style={{ width: 350, left: 0, top: 0 }}
                       >
-                        <div class="cbp-item-wrapper">
-                          <div class="news_item shadow">
-                            <a class="image" href="javascript:void(0)">
+                        <div className="cbp-item-wrapper">
+                          <div className="news_item shadow">
+                            <a className="image" href="javascript:void(0)">
                               <div
-                                class="loader-details-bayan"
+                                className="loader-details-bayan"
                                 style={{ height: 250 }}
                               />
                             </a>
@@ -165,68 +164,64 @@ class Bayans extends Component {
                   })
                 : sliceArr.map((v, i) => {
                     return (
-                      <Link
-                        key={i}
-                        to="/book-details"
-                        onClick={() => store.dispatch(bookDetails(v))}
-                      >
-                        <div className="cbp-item" style={styles.cbpItem}>
-                          <div className="cbp-item-wrapper">
-                            <div className="news_item shadow">
-                              <div className="img-responsive books">
-                                <img
-                                  src={v.bookImage}
-                                  alt="Not found!"
-                                  style={styles.image}
-                                />
-                              </div>
-                              <div className="news_desc">
-                                <h5 style={styles.cbpItemH5}>{v.authorName}</h5>
-                                <h3 className="text-capitalize font-light darkcolor">
-                                  <a href="javascript:void(0)">{v.title}</a>
-                                </h3>
-                                <div style={styles.btnWrapper}>
-                                  <a
-                                    href={v.pdf}
-                                    className="button btnsecondary btn-gradient-hvr"
-                                  >
-                                    <i className="fa fa-book" />
-                                  </a>
-                                  <Link
-                                    to="/book-details"
-                                    className="button btnprimary btn-gradient-hvr"
-                                    onClick={() => {
-                                      store.dispatch(bookDetails(v));
-                                    }}
-                                  >
-                                    Read More
-                                  </Link>
-                                  <a
-                                    href={v.pdf}
-                                    download={v.pdf}
-                                    className="button btnsecondary btn-gradient-hvr"
-                                  >
-                                    <i className="fa fa-download" />
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
+                      // <Link
+                      //   key={i}
+                      //   to="/book-details"
+                      //   onClick={() => store.dispatch(bookDetails(v))}
+                      // >
+                      <div className="books-wrapper" key={i}>
+                        <div className="img-responsive books">
+                          <img
+                            src={v.bookImage}
+                            alt="Not found!"
+                            style={styles.image}
+                          />
+                        </div>
+                        <div className="books-bottom-wrapper">
+                          <h5 style={styles.cbpItemH5}>{v.authorName}</h5>
+                          <h3 className="text-capitalize font-light darkcolor">
+                            {v.title}
+                          </h3>
+                          <div style={styles.btnWrapper}>
+                            <a
+                              href={v.pdf}
+                              className="button btnsecondary btn-gradient-hvr"
+                            >
+                              <i className="fa fa-book" />
+                            </a>
+                            <Link
+                              to="/book-details"
+                              className="button btnprimary btn-gradient-hvr"
+                              onClick={() => {
+                                store.dispatch(bookDetails(v));
+                              }}
+                            >
+                              Read More
+                            </Link>
+                            <a
+                              href={v.pdf}
+                              download={v.pdf}
+                              className="button btnsecondary btn-gradient-hvr"
+                            >
+                              <i className="fa fa-download" />
+                            </a>
                           </div>
                         </div>
-                      </Link>
+                      </div>
+                      // </Link>
                     );
                   })}
             </div>
 
             {isPagination && (
-              <div class="row">
-                <div class="col-sm-12">
+              <div className="row">
+                <div className="col-sm-12">
                   <ul
-                    class="pagination justify-content-center top50"
+                    className="pagination justify-content-center top50"
                     style={{ display: "flex" }}
                   >
                     <li
-                      class={
+                      className={
                         activePages[0] === pages[0]
                           ? "page-item disabled"
                           : "page-item"
@@ -242,8 +237,8 @@ class Bayans extends Component {
                           : console.log("No Pages");
                       }}
                     >
-                      <a class="page-link" href="javascript:void(0)">
-                        <i class="fa fa-angle-left" />
+                      <a className="page-link" href="javascript:void(0)">
+                        <i className="fa fa-angle-left" />
                       </a>
                     </li>
                     {activePages.map(v => {
@@ -255,6 +250,7 @@ class Bayans extends Component {
                           onClick={() =>
                             activeIndex !== v && this.fetchByPagination(v)
                           }
+                          key={v}
                         >
                           <a className="page-link" href="javascript:void(0)">
                             {v}
@@ -263,7 +259,7 @@ class Bayans extends Component {
                       );
                     })}
                     <li
-                      class={
+                      className={
                         activePages[activePagelength - 1] === pages[length - 1]
                           ? "page-item disabled"
                           : "page-item"
@@ -279,8 +275,8 @@ class Bayans extends Component {
                           : console.log("No Pages");
                       }}
                     >
-                      <a class="page-link" href="javascript:void(0)">
-                        <i class="fa fa-angle-right" />
+                      <a className="page-link" href="javascript:void(0)">
+                        <i className="fa fa-angle-right" />
                       </a>
                     </li>
                   </ul>

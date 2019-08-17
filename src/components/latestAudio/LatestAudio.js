@@ -5,11 +5,6 @@ import { store } from "../../redux/store/store";
 import _ from "lodash";
 
 const styles = {
-  wrapper: {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "center"
-  },
   cbpItem: {
     width: 350,
     left: 0,
@@ -24,6 +19,11 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center"
+  },
+  mainwrapper: {
+    justifyContent: "center",
+    display: "flex",
+    flexWrap: "wrap"
   }
 };
 
@@ -31,7 +31,7 @@ class LatestAudio extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      latestBayan: null
+      latestBayan: []
     };
   }
 
@@ -61,7 +61,7 @@ class LatestAudio extends Component {
               <h3>Latest Audios</h3>
             </div>
           </div>
-          <div style={styles.wrapper} className="top20">
+          <div className="top20 bayan-main-wrapper">
             {!latestBayan
               ? [0, 1, 2].map((v, i) => {
                   return (
@@ -95,69 +95,54 @@ class LatestAudio extends Component {
                 })
               : latestBayan.map((v, i) => {
                   return (
-                    <Link
-                      key={i}
-                      to="/bayan-details"
-                      onClick={() => store.dispatch(bayanDetails(v))}
-                    >
-                      <div className="cbp-item" style={styles.cbpItem}>
-                        <div className="cbp-item-wrapper">
-                          <div className="news_item shadow">
-                            <div className="img-responsive bayans">
-                              <audio src={v.embed} controls />
-                            </div>
-                            <div className="news_desc">
-                              <h5 style={styles.cbpItemH5}>{v.speecherName}</h5>
-                              <h3 className="text-capitalize font-light darkcolor">
-                                <a href="javascript:void(0)">{v.title}</a>
-                              </h3>
-                              {/* <p
-                              className="top20 bottom35"
-                              dangerouslySetInnerHTML={{
-                                __html: v.description
-                                  ? v.description.length > 160
-                                    ? `${v.description.substr(0, 160)}...`
-                                    : v.description
-                                  : ""
-                              }}
-                            /> */}
-                              <div style={styles.btnWrapper}>
-                                <Link
-                                  to="/bayan-details"
-                                  className="button btnprimary btn-gradient-hvr"
-                                  onClick={() => {
-                                    store.dispatch(bayanDetails(v));
-                                  }}
-                                >
-                                  Read more
-                                </Link>
-                                <a
-                                  href={v.embed}
-                                  download={v.embed}
-                                  className="button btnsecondary btn-gradient-hvr"
-                                >
-                                  Download
-                                </a>
-                              </div>
-                            </div>
-                          </div>
+                    // <Link
+                    //   key={i}
+                    //   to="/bayan-details"
+                    //   onClick={() => store.dispatch(bayanDetails(v))}
+                    // >
+                    <div className="bayans-wrapper" key={i}>
+                      <div className="img-responsive bayans">
+                        <audio src={v.embed} controls />
+                      </div>
+                      <div className="bayans-bottom-wrapper">
+                        <h5 style={styles.cbpItemH5}>{v.speecherName}</h5>
+                        <h3 className="text-capitalize font-light darkcolor">
+                          {v.title}
+                        </h3>
+                        <div style={styles.btnWrapper}>
+                          <Link
+                            to="/bayan-details"
+                            className="button btnprimary btn-gradient-hvr"
+                            onClick={() => {
+                              store.dispatch(bayanDetails(v));
+                            }}
+                          >
+                            Read more
+                          </Link>
+                          <a
+                            href={v.embed}
+                            download={v.embed}
+                            className="button btnsecondary btn-gradient-hvr"
+                          >
+                            Download
+                          </a>
                         </div>
                       </div>
-                    </Link>
+                    </div>
+                    // </Link>
                   );
                 })}
           </div>
           <div className="row">
-            <div className="col-md-8 offset-md-2 col-sm-12 center-block text-center">
+            <div className="col-md-8 offset-md-2 col-sm-12 center-block text-center top20">
               <div className="wow fadeInUp" data-wow-delay="300ms">
                 <br />
                 <a
                   href="javascript:void(0)"
-                  className="top20 button btnprimary wow fadeInUp"
+                  className="button btnprimary wow fadeInUp"
                   data-wow-delay="450ms"
                   onClick={() => this.props.history.push("/bayans")}
                 >
-                  {" "}
                   MORE BAYANS
                 </a>
               </div>

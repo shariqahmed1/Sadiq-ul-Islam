@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import "font-awesome/css/font-awesome.min.css";
-import OthersPageHeader from "../../components/othersPageHeader/OthersPageHeader";
+import Header from "../../components/header/Header";
 import PageHeader from "../../components/pageHeader/PageHeader";
 import Footer from "../../components/footer/Footer";
 import { store } from "../../redux/store/store";
 import "../404/style.css";
-import { FIRESTORE } from "../../constants/firebase/firebase";
 
 class Bayans extends Component {
   constructor(props) {
@@ -44,7 +43,7 @@ class Bayans extends Component {
     return (
       <div>
         {/* <!-- header --> */}
-        <OthersPageHeader />
+        <Header />
 
         {/* <!--PageHeader--> */}
         <PageHeader
@@ -62,14 +61,14 @@ class Bayans extends Component {
             }
           ]}
         />
-        <section id="our-blog" class="padding bglight">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="news_item shadow">
-                  <div class="image">
+        <section id="our-blog" className="padding bglight">
+          <div className="container">
+            <div className="row">
+              <div className="col-md-12">
+                <div className="news_item shadow">
+                  <div className="image">
                     {isLoading ? (
-                      <div class="loader-title-line" />
+                      <div className="loader-title-line" />
                     ) : (
                       <h2
                         style={{ fontWeight: 400 }}
@@ -79,7 +78,7 @@ class Bayans extends Component {
                       </h2>
                     )}
                   </div>
-                  <div class="news_desc text-left">
+                  <div className="news_desc text-left">
                     {/* <h3 class="text-capitalize font-light darkcolor">
                       <a href="javascript:void(0)">
                         {isLoading ? (
@@ -111,14 +110,14 @@ class Bayans extends Component {
                       </li>
                     </ul> */}
                     {isLoading ? (
-                      <div class="bottom35">
-                        <div class="loader-desc-line" />
-                        <div class="loader-desc-line" />
-                        <div class="loader-desc-line" />
+                      <div className="bottom35">
+                        <div className="loader-desc-line" />
+                        <div className="loader-desc-line" />
+                        <div className="loader-desc-line" />
                       </div>
                     ) : (
                       <p
-                        class="bottom35"
+                        className="bottom35"
                         style={{
                           textAlign: !data.about ? "center" : "justify"
                         }}

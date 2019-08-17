@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "font-awesome/css/font-awesome.min.css";
-import OthersPageHeader from "../../components/othersPageHeader/OthersPageHeader";
+import Header from "../../components/header/Header";
 import PageHeader from "../../components/pageHeader/PageHeader";
 import Footer from "../../components/footer/Footer";
 import { Link } from "react-router-dom";
@@ -41,11 +41,10 @@ class BookDetails extends Component {
 
   render() {
     const { isLoading, data } = this.state;
-    console.clear();
     return (
       <div>
         {/* <!-- header --> */}
-        <OthersPageHeader />
+        <Header />
         {/* <!--PageHeader--> */}
         <PageHeader
           title={"Book Details"}
@@ -67,38 +66,44 @@ class BookDetails extends Component {
             }
           ]}
         />
-        <section id="our-blog" class="padding bglight">
-          <div class="container">
-            <div class="row">
-              <div class="col-md-10 offset-md-1">
-                <div class="news_item shadow">
-                  <div class="image" style={{ paddingTop: 20 }}>
+        <section id="our-blog" className="padding bglight">
+          <div className="container">
+            <div className="row">
+              <div className="col-md-10 offset-md-1">
+                <div className="news_item shadow">
+                  <div className="image" style={{ paddingTop: 20 }}>
                     {isLoading ? (
-                      <div class="loader-details-image" />
+                      <div className="loader-details-image" />
                     ) : (
                       <img
                         src={data.bookImage}
                         alt="Latest News"
-                        class="img-responsive details-page-image-wrapper"
+                        className="img-responsive details-page-image-wrapper"
                       />
                     )}
                   </div>
-                  <div class="news_desc text-left" style={{ marginTop: 20 }}>
-                    <h3 class="text-capitalize font-light darkcolor text-center">
+                  <div
+                    className="news_desc text-left"
+                    style={{ marginTop: 20 }}
+                  >
+                    <h3 className="text-capitalize font-light darkcolor text-center">
                       {isLoading ? (
-                        <div class="loader-title-line" />
+                        <div className="loader-title-line" />
                       ) : (
                         data.title
                       )}
                     </h3>
-                    <ul class="meta-tags top20 bottom20">
+                    <ul className="meta-tags top20 bottom20">
                       <li>
                         {" "}
                         {!isLoading && (
-                          <i style={{ marginBottom: 6 }} class="fa fa-user-o" />
+                          <i
+                            style={{ marginBottom: 6 }}
+                            className="fa fa-user-o"
+                          />
                         )}
                         {isLoading ? (
-                          <div class="loader-text-line" />
+                          <div className="loader-text-line" />
                         ) : (
                           <span
                             style={{
@@ -113,14 +118,14 @@ class BookDetails extends Component {
                       </li>
                     </ul>
                     {isLoading ? (
-                      <div class="bottom35">
-                        <p class="loader-desc-line" />
-                        <p class="loader-desc-line" />
-                        <p class="loader-desc-line" />
+                      <div className="bottom35">
+                        <p className="loader-desc-line" />
+                        <p className="loader-desc-line" />
+                        <p className="loader-desc-line" />
                       </div>
                     ) : (
                       <p
-                        class="bottom35"
+                        className="bottom35"
                         dangerouslySetInnerHTML={{
                           __html: data.description
                         }}
@@ -138,7 +143,7 @@ class BookDetails extends Component {
                       >
                         <a
                           href={data.pdf}
-                          class="button btnsecondary scndry-gradient-hvr"
+                          className="button btnsecondary scndry-gradient-hvr"
                         >
                           Online Read
                         </a>

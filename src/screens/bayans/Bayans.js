@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "font-awesome/css/font-awesome.min.css";
-import OthersPageHeader from "../../components/othersPageHeader/OthersPageHeader";
+import Header from "../../components/header/Header";
 import PageHeader from "../../components/pageHeader/PageHeader";
 import Footer from "../../components/footer/Footer";
 import { Link } from "react-router-dom";
@@ -8,7 +8,6 @@ import { store } from "../../redux/store/store";
 import "../404/style.css";
 import _ from "lodash";
 import { bayanDetails } from "../../redux/actions/actions";
-import { Offline } from "react-detect-offline";
 
 const styles = {
   cbpItem: {
@@ -91,10 +90,11 @@ class Bayans extends Component {
       activeIndex - 1 === 0 ? 0 : (activeIndex - 1) * 9 + 1;
     const sliceEndPoint = sliceStartPoint + 9;
     const sliceArr = bayans.slice(sliceStartPoint, sliceEndPoint);
+
     return (
       <div>
         {/* <!-- header --> */}
-        <OthersPageHeader />
+        <Header />
 
         {/* <!--PageHeader--> */}
         <PageHeader
@@ -155,55 +155,41 @@ class Bayans extends Component {
               ) : sliceArr.length > 0 ? (
                 sliceArr.map((v, i) => {
                   return (
-                    <Link
-                      key={i}
-                      to="/bayan-details"
-                      onClick={() => store.dispatch(bayanDetails(v))}
-                    >
-                      <div className="cbp-item" style={styles.cbpItem}>
-                        <div className="cbp-item-wrapper">
-                          <div className="news_item shadow">
-                            <div className="img-responsive bayans">
-                              <audio src={v.embed} controls />
-                            </div>
-                            <div className="news_desc">
-                              <h5 style={styles.cbpItemH5}>{v.speecherName}</h5>
-                              <h3 className="text-capitalize font-light darkcolor">
-                                <a href="javascript:void(0)">{v.title}</a>
-                              </h3>
-                              {/* <p
-                              className="top20 bottom35"
-                              dangerouslySetInnerHTML={{
-                                __html: v.description
-                                  ? v.description.length > 160
-                                    ? `${v.description.substr(0, 160)}...`
-                                    : v.description
-                                  : ""
-                              }}
-                            /> */}
-                              <div style={styles.btnWrapper}>
-                                <Link
-                                  to="/bayan-details"
-                                  className="button btnprimary btn-gradient-hvr"
-                                  onClick={() => {
-                                    store.dispatch(bayanDetails(v));
-                                  }}
-                                >
-                                  Read more
-                                </Link>
-                                <a
-                                  className="button btnsecondary btn-gradient-hvr"
-                                  href={v.embed}
-                                  download={v.title}
-                                >
-                                  Download
-                                </a>
-                              </div>
-                            </div>
-                          </div>
+                    // <Link
+                    //   key={i}
+                    //   to="/bayan-details"
+                    //   onClick={() => store.dispatch(bayanDetails(v))}
+                    // >
+                    <div className="bayans-wrapper" key={i}>
+                      <div className="img-responsive bayans">
+                        <audio src={v.embed} controls />
+                      </div>
+                      <div className="bayans-bottom-wrapper">
+                        <h5 style={styles.cbpItemH5}>{v.speecherName}</h5>
+                        <h3 className="text-capitalize font-light darkcolor">
+                          {v.title}
+                        </h3>
+                        <div style={styles.btnWrapper}>
+                          <Link
+                            to="/bayan-details"
+                            className="button btnprimary btn-gradient-hvr"
+                            onClick={() => {
+                              store.dispatch(bayanDetails(v));
+                            }}
+                          >
+                            Read more
+                          </Link>
+                          <a
+                            href={v.embed}
+                            download={v.embed}
+                            className="button btnsecondary btn-gradient-hvr"
+                          >
+                            Download
+                          </a>
                         </div>
                       </div>
-                    </Link>
+                    </div>
+                    // </Link>
                   );
                 })
               ) : (

@@ -17,13 +17,16 @@ class Header extends Component {
       isShow: false,
       speechers: [],
       authors: [],
-      personalities: []
+      personalities: [],
+      pathname: ""
     };
     this.handleClose = this.handleClose.bind(this);
   }
 
   componentDidMount() {
     this.getStatesFromRedux();
+    const { pathname } = this.props.location;
+    this.setState({ pathname });
     store.subscribe(() => this.getStatesFromRedux());
   }
 
@@ -58,7 +61,7 @@ class Header extends Component {
   }
 
   render() {
-    const { isShow, speechers, authors, personalities } = this.state;
+    const { isShow, speechers, authors, personalities, pathname } = this.state;
     return (
       <div id="top">
         <header className="site-header">
@@ -89,9 +92,19 @@ class Header extends Component {
               <div className="collapse navbar-collapse" id="xenav">
                 <ul className="navbar-nav" id="container">
                   <li className="nav-item">
-                    <AnchorLink className="nav-link" href="#top">
-                      HOME
-                    </AnchorLink>
+                    {pathname === "/" || pathname === "" ? (
+                      <AnchorLink className="nav-link" href={"#top"}>
+                        HOME
+                      </AnchorLink>
+                    ) : (
+                      <a
+                        className="nav-link"
+                        href="javascript:void(0)"
+                        onClick={() => this.props.history.push("/")}
+                      >
+                        HOME
+                      </a>
+                    )}
                   </li>
                   <li className="nav-item has-sub dropdown">
                     <a
@@ -109,15 +122,27 @@ class Header extends Component {
                       </span>
                     </a>
                     <div
-                      className="dropdown-menu zoom-in"
+                      className="dropdown-menu flip"
                       aria-labelledby="navbarDropdown"
                     >
-                      <AnchorLink
-                        className="dropdown-item"
-                        href="#latest-audio"
-                      >
-                        Latest
-                      </AnchorLink>
+                      {pathname === "/" || pathname === "" ? (
+                        <AnchorLink
+                          className="dropdown-item"
+                          href="#latest-audio"
+                        >
+                          Latest
+                        </AnchorLink>
+                      ) : (
+                        <a
+                          className="dropdown-item"
+                          href="javascript:void(0)"
+                          onClick={() =>
+                            this.props.history.push("/#latest-audio")
+                          }
+                        >
+                          Latest
+                        </a>
+                      )}
                       {speechers.length > 0 && (
                         <div className="dropdown-divider" />
                       )}
@@ -160,12 +185,27 @@ class Header extends Component {
                       </span>
                     </a>
                     <div
-                      className="dropdown-menu zoom-in"
+                      className="dropdown-menu flip"
                       aria-labelledby="navbarDropdown2"
                     >
-                      <AnchorLink className="dropdown-item" href="#latest-book">
-                        Latest
-                      </AnchorLink>
+                      {pathname === "/" || pathname === "" ? (
+                        <AnchorLink
+                          className="dropdown-item"
+                          href={"#latest-book"}
+                        >
+                          Latest
+                        </AnchorLink>
+                      ) : (
+                        <a
+                          className="dropdown-item"
+                          href="javascript:void(0)"
+                          onClick={() =>
+                            this.props.history.push("/#latest-book")
+                          }
+                        >
+                          Latest
+                        </a>
+                      )}
                       {authors.length > 0 && (
                         <div className="dropdown-divider" />
                       )}
@@ -193,12 +233,22 @@ class Header extends Component {
                     </div>
                   </li>
                   <li className="nav-item">
-                    <AnchorLink
-                      className="nav-link pagescroll"
-                      href="#programs"
-                    >
-                      EVENTS
-                    </AnchorLink>
+                    {pathname === "/" || pathname === "" ? (
+                      <AnchorLink
+                        className="nav-link pagescroll"
+                        href={"#programs"}
+                      >
+                        EVENTS
+                      </AnchorLink>
+                    ) : (
+                      <a
+                        className="nav-link pagescroll"
+                        href="javascript:void(0)"
+                        onClick={() => this.props.history.push("/events")}
+                      >
+                        EVENTS
+                      </a>
+                    )}
                   </li>
                 </ul>
                 <ul className="navbar-nav ml-auto">
@@ -232,7 +282,7 @@ class Header extends Component {
                       </span>
                     </a>
                     <div
-                      className="dropdown-menu zoom-in"
+                      className="dropdown-menu flip"
                       aria-labelledby="navbarDropdown3"
                     >
                       {personalities.length > 0
