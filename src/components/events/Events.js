@@ -90,14 +90,14 @@ class Events extends Component {
               <div className="col-md-8 offset-md-2 col-sm-12 center-block text-center">
                 <div className="wow fadeInUp" data-wow-delay="300ms">
                   <br />
-                  <a
-                    href="javascript:void(0)"
+                  <button
+                    // href="javascript:void(0)"
                     className="button btnsecondary pagescroll wow fadeInUp"
                     data-wow-delay="450ms"
                     onClick={() => this.props.history.push("/events")}
                   >
                     more Events
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>

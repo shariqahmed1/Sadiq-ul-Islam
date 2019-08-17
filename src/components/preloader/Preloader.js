@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class PreLoader extends Component {
   render() {
     return (
-        <div className="loader">
-          <div className="loader-inner">
-            <div className="loader-blocks">
-              <span className="block-1"></span>
+      <div className="loader">
+        <div className="loader-inner">
+          {/* <div className="loader-blocks">
+            <span className="block-1"></span>
               <span className="block-2"></span>
               <span className="block-3"></span>
               <span className="block-4"></span>
@@ -21,10 +21,15 @@ class PreLoader extends Component {
               <span className="block-13"></span>
               <span className="block-14"></span>
               <span className="block-15"></span>
-              <span className="block-16"></span>
-            </div>
-          </div>
+              <span className="block-16"></span> 
+          </div>*/}
+          <img
+            alt="not found!"
+            src={require("../../images/rotate-logo.gif")}
+            style={{ height: 150, width: 300 }}
+          />
         </div>
+      </div>
     );
   }
 }

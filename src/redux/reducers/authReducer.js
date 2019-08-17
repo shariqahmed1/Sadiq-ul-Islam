@@ -30,6 +30,9 @@ const reducer = (state = {}, action) => {
     case "BOOKS": {
       return { ...state, books: action.books };
     }
+    case "SLIDERS": {
+      return { ...state, sliders: action.sliders };
+    }
     case "EVENTS": {
       return { ...state, events: action.events };
     }

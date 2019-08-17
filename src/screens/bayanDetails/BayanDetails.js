@@ -4,7 +4,6 @@ import PageHeader from "../../components/pageHeader/PageHeader";
 import Footer from "../../components/footer/Footer";
 import { store } from "../../redux/store/store";
 import "../404/style.css";
-import { FIRESTORE, FIREBASE } from "../../constants/firebase/firebase";
 import Header from "../../components/header/Header";
 
 class Bayans extends Component {
@@ -39,7 +38,6 @@ class Bayans extends Component {
   }
 
   render() {
-    // console.clear();
     const { isLoading, data } = this.state;
     return (
       <div>

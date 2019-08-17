@@ -7,7 +7,8 @@ import {
   books,
   speechers,
   authors,
-  personalities
+  personalities,
+  sliders
 } from "./redux/actions/actions";
 import { store } from "./redux/store/store";
 
@@ -19,6 +20,7 @@ class App extends Component {
     this.fetchSpeechers();
     this.fetchAuthors();
     this.fetchPersonalities();
+    this.fetchSliders();
   }
 
   fetchBayans = () => {
@@ -34,6 +36,18 @@ class App extends Component {
         });
         store.dispatch(bayans(arr));
       });
+  };
+
+  fetchSliders = () => {
+    FIRESTORE.collection("slider").onSnapshot(snap => {
+      let arr = [];
+      snap.forEach(doc => {
+        var obj = doc.data();
+        obj.id = doc.id;
+        arr.push(obj);
+      });
+      store.dispatch(sliders(arr));
+    });
   };
 
   fetchBooks = () => {

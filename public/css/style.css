@@ -671,10 +671,10 @@ i::before,i::after{
    padding-top: 0;
    z-index: 1000;
 }
-.center-brand {
+/* .center-brand {
    padding-top: 1rem;
    padding-bottom: 1rem;
-}
+} */
 .center-brand, .transparent-bg {
 	left: 0;
 	top: 0;
@@ -685,6 +685,7 @@ i::before,i::after{
 .bg-invisible, .boxed-nav {
    position: absolute;
    width: 100%;
+   background-color: #1a1e1e;
 }
 .bg-invisible .container {
    opacity: 0;
@@ -1837,7 +1838,7 @@ i::before,i::after{
    bottom: 0;
 }
 .banner-overlay::after, .sliderImg::after {
-   background: rgba(0,0,0,.6);
+   /* background: rgba(0,0,0,.6); */
 }
 .zeus.tparrows.tp-rightarrow::before{
    content: "\f105";

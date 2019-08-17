@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "font-awesome/css/font-awesome.min.css";
-import { FIRESTORE } from "../../constants/firebase/firebase";
+import { store } from "../../redux/store/store";
+import _ from "lodash";
 
 class App extends Component {
   constructor(props) {
@@ -12,17 +13,32 @@ class App extends Component {
   }
 
   componentDidMount() {
-    let { sliders } = this.state;
-    FIRESTORE.collection("slider").onSnapshot(snapshot => {
-      sliders = [];
-      snapshot.forEach(doc => {
-        var obj = doc.data();
-        obj.id = doc.id;
-        sliders.push(obj);
-      });
-      this.setState({ sliders, isLoading: false });
-    });
+    this.getStatesFromRedux();
+    store.subscribe(() => this.getStatesFromRedux());
   }
+
+  getStatesFromRedux = () => {
+    let { AuthReducer } = store.getState();
+    let sliders =
+      AuthReducer &&
+      AuthReducer.sliders &&
+      AuthReducer.sliders.length &&
+      _.sortBy(AuthReducer.sliders, ["timeStamp"]).reverse();
+    this.setState({ sliders, isLoading: false });
+  };
+
+  // componentDidMount() {
+  //   let { sliders } = this.state;
+  //   FIRESTORE.collection("slider").onSnapshot(snapshot => {
+  //     sliders = [];
+  //     snapshot.forEach(doc => {
+  //       var obj = doc.data();
+  //       obj.id = doc.id;
+  //       sliders.push(obj);
+  //     });
+  //     this.setState({ sliders, isLoading: false });
+  //   });
+  // }
 
   render() {
     const { sliders, isLoading } = this.state;
@@ -31,6 +47,7 @@ class App extends Component {
         id="carouselExampleIndicators"
         className="carousel"
         data-ride="carousel"
+        style={{ marginTop: 69 }}
       >
         <ol className="carousel-indicators">
           {sliders ? (
@@ -76,7 +93,7 @@ class App extends Component {
                         alt="First slide"
                         style={{
                           backgroundSize: "cover",
-                          maxHeight: "100vh"
+                          maxHeight: "89vh"
                         }}
                       />
                     </div>
@@ -99,7 +116,7 @@ class App extends Component {
                   className="d-block  w-100"
                   style={{
                     backgroundSize: "cover",
-                    maxHeight: "100vh"
+                    maxHeight: "89vh"
                   }}
                   src={require("../../images/sliderStatus.jpg")}
                   alt="First slide"
@@ -112,7 +129,7 @@ class App extends Component {
                 className="d-block  w-100"
                 style={{
                   backgroundSize: "cover",
-                  maxHeight: "100vh"
+                  maxHeight: "89vh"
                 }}
                 src={require("../../images/sliderStatus.jpg")}
                 alt="First slide"

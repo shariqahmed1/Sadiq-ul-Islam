@@ -3,10 +3,8 @@ import "font-awesome/css/font-awesome.min.css";
 import Header from "../../components/header/Header";
 import PageHeader from "../../components/pageHeader/PageHeader";
 import Footer from "../../components/footer/Footer";
-import { Link } from "react-router-dom";
 import { store } from "../../redux/store/store";
 import "../404/style.css";
-import { FIRESTORE } from "../../constants/firebase/firebase";
 
 class BookDetails extends Component {
   constructor(props) {

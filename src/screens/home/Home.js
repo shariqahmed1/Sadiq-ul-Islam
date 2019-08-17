@@ -10,6 +10,9 @@ import Counters from "../../components/counters/Counters";
 import Contact from "../../components/contact/Contact";
 import Footer from "../../components/footer/Footer";
 import SnackBar from "../../components/snackBar/SnackBar";
+import PreLoader from "../../components/preloader/Preloader";
+import { store } from "../../redux/store/store";
+import _ from "lodash";
 
 class Home extends Component {
   constructor(props) {
@@ -17,10 +20,26 @@ class Home extends Component {
     this.state = {
       isLoader: true,
       open: false,
-      message: ""
+      message: "",
+      sliders: null
     };
     this.handleSnackBar = this.handleSnackBar.bind(this);
   }
+
+  componentDidMount() {
+    this.getStatesFromRedux();
+    store.subscribe(() => this.getStatesFromRedux());
+  }
+
+  getStatesFromRedux = () => {
+    let { AuthReducer } = store.getState();
+    let sliders =
+      AuthReducer &&
+      AuthReducer.sliders &&
+      AuthReducer.sliders.length &&
+      _.sortBy(AuthReducer.sliders, ["timeStamp"]).reverse();
+    this.setState({ sliders });
+  };
 
   handleClose = () => {
     this.setState({
@@ -43,8 +62,8 @@ class Home extends Component {
   };
 
   render() {
-    // console.clear();
-    return (
+    const { sliders } = this.state;
+    return sliders ? (
       <div>
         {/* <!--PreLoader--> */}
         {/* {isLoader && <PreLoader />} */}
@@ -83,6 +102,8 @@ class Home extends Component {
           open={this.state.open}
         />
       </div>
+    ) : (
+      <PreLoader />
     );
   }
 }

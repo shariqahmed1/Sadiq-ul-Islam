@@ -108,3 +108,10 @@ export const eventDetails = eventDetails => {
     eventDetails
   };
 };
+
+export const sliders = sliders => {
+  return {
+    type: "SLIDERS",
+    sliders
+  };
+};

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Router, Route, Redirect, Switch } from "react-router-dom";
+import { Router, Route, Switch } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import Home from "../screens/home/Home";
 import Bayans from "../screens/bayans/Bayans";

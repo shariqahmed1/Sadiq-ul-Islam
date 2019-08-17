@@ -67,7 +67,7 @@ class Header extends Component {
         <header className="site-header">
           <nav className="navbar navbar-expand-xl center-brand static-nav">
             <div className="container">
-              <a className="navbar-brand" href="/">
+              <Link className="navbar-brand" to="/">
                 <img
                   src={require("../../images/1.png")}
                   alt="logo"
@@ -78,7 +78,7 @@ class Header extends Component {
                   alt="logo"
                   className="logo-scrolled"
                 />
-              </a>
+              </Link>
               <button
                 className="navbar-toggler navbar-toggler-right collapsed"
                 type="button"
